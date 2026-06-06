@@ -1,0 +1,123 @@
+﻿🎯  Viral Hook Library — 120 Hooks (पहले 3 सेकंड),,,,,
+हर pattern के 6 hooks। {crop}/{region}/{n}/{scheme}/{lang} को आज के topic से replace करो।,,,,,
+#,Pattern,Hook #,Hook Template (Hindi),Psychology,Best Platform
+1,Profit Reveal,H1,इस किसान ने {crop} से ₹{n} लाख कमाए — कैसे? पूरा हिसाब देखो,Greed + aspiration — पैसे का सपना,YouTube+Reel
+2,Profit Reveal,H2,1 एकड़ {crop} = ₹{n}? यकीन नहीं होगा लेकिन सच है,Greed + aspiration — पैसे का सपना,YouTube+Reel
+3,Profit Reveal,H3,{crop} बेचकर इस किसान ने नई गाड़ी खरीदी — राज़ क्या है?,Greed + aspiration — पैसे का सपना,YouTube+Reel
+4,Profit Reveal,H4,मंडी से दोगुना दाम — {crop} में यह तरीका कोई नहीं बताता,Greed + aspiration — पैसे का सपना,YouTube+Reel
+5,Profit Reveal,H5,₹{n} extra हर quintal — {crop} किसान यह गलती मत करना,Greed + aspiration — पैसे का सपना,YouTube+Reel
+6,Profit Reveal,H6,गाँव वाले हँसते थे — आज {crop} से सबसे ज़्यादा कमाता है,Greed + aspiration — पैसे का सपना,YouTube+Reel
+7,Mandi Shock,H1,{crop} मंडी में ₹{n}/kg — AgroManch पर ₹{n2}! फर्क देखो 🔴🟢,Loss aversion + anger — शोषण का गुस्सा,Reels+WhatsApp
+8,Mandi Shock,H2,रुको! {crop} मंडी ले जाने से पहले यह video देखो,Loss aversion + anger — शोषण का गुस्सा,Reels+WhatsApp
+9,Mandi Shock,H3,मंडी में आपका {crop} ₹{n} में बिका — असली कीमत ₹{n2} थी,Loss aversion + anger — शोषण का गुस्सा,Reels+WhatsApp
+10,Mandi Shock,H4,7 बिचौलिए आपके {crop} का मुनाफा खा रहे हैं — proof देखो,Loss aversion + anger — शोषण का गुस्सा,Reels+WhatsApp
+11,Mandi Shock,H5,मंडी की पर्ची दिखाता हूँ — {crop} पर कितनी लूट हुई,Loss aversion + anger — शोषण का गुस्सा,Reels+WhatsApp
+12,Mandi Shock,H6,{crop} का सही भाव क्या है? मंडी आपको कभी नहीं बताएगी,Loss aversion + anger — शोषण का गुस्सा,Reels+WhatsApp
+13,Crop Emergency Alert,H1,🚨 {region} में {crop} पर रोग फैल रहा — 72 घंटे में यह करो,Fear + urgency — फसल बचाने का डर,Shorts+WhatsApp
+14,Crop Emergency Alert,H2,आपकी {crop} की पत्तियाँ ऐसी हैं? तुरंत रुको और देखो,Fear + urgency — फसल बचाने का डर,Shorts+WhatsApp
+15,Crop Emergency Alert,H3,एक हफ्ते में पूरी {crop} बर्बाद — यह कीट पहचानो,Fear + urgency — फसल बचाने का डर,Shorts+WhatsApp
+16,Crop Emergency Alert,H4,🚨 {crop} किसान alert: यह लक्षण दिखे तो देर मत करना,Fear + urgency — फसल बचाने का डर,Shorts+WhatsApp
+17,Crop Emergency Alert,H5,पड़ोसी की {crop} चौपट हो गई — आपकी कैसे बचेगी?,Fear + urgency — फसल बचाने का डर,Shorts+WhatsApp
+18,Crop Emergency Alert,H6,{crop} में यह दाग = खतरे की घंटी। इलाज यहाँ देखो,Fear + urgency — फसल बचाने का डर,Shorts+WhatsApp
+19,Farmer Success Story,H1,'पहले डर था online बेचने का — आज {crop} से खुशी है',Social proof + hope — 'मैं भी कर सकता हूं',Reels+IG
+20,Farmer Success Story,H2,{region} के इस किसान की कहानी आपको रुला देगी,Social proof + hope — 'मैं भी कर सकता हूं',Reels+IG
+21,Farmer Success Story,H3,कर्ज़ में डूबा किसान — {crop} ने ज़िंदगी बदल दी,Social proof + hope — 'मैं भी कर सकता हूं',Reels+IG
+22,Farmer Success Story,H4,"मज़दूरी छोड़ी, {crop} अपनाई — आज लाखों कमाता है",Social proof + hope — 'मैं भी कर सकता हूं',Reels+IG
+23,Farmer Success Story,H5,'मेरे पिता मंडी में लुटते थे — मैंने तरीका बदला',Social proof + hope — 'मैं भी कर सकता हूं',Reels+IG
+24,Farmer Success Story,H6,500 किसानों ने यह किया — नतीजा देखकर चौंक जाओगे,Social proof + hope — 'मैं भी कर सकता हूं',Reels+IG
+25,Machinery Pride,H1,यह मशीन {crop} की लागत आधी कर देती है 😮,Status + envy — आधुनिक किसान पहचान,Reels+IG
+26,Machinery Pride,H2,₹{n} की यह मशीन 10 मज़दूरों का काम करती है,Status + envy — आधुनिक किसान पहचान,Reels+IG
+27,Machinery Pride,H3,{crop} की कटाई अब 1 घंटे में — कैसे? देखो,Status + envy — आधुनिक किसान पहचान,Reels+IG
+28,Machinery Pride,H4,पुराना तरीका भूल जाओ — {crop} के लिए यह मशीन,Status + envy — आधुनिक किसान पहचान,Reels+IG
+29,Machinery Pride,H5,subsidy पर मिलती है यह मशीन — {crop} किसान ध्यान दो,Status + envy — आधुनिक किसान पहचान,Reels+IG
+30,Machinery Pride,H6,इस जुगाड़ मशीन ने {region} के किसान का खेल बदल दिया,Status + envy — आधुनिक किसान पहचान,Reels+IG
+31,Scheme Bomb,H1,"🚨 {scheme} — किस्त आ रही है, status अभी check करो!",Free money + FOMO — सरकारी लाभ छूट न जाए,WhatsApp+IG
+32,Scheme Bomb,H2,{scheme} में ₹{n} सीधे खाते में — eligibility देखो,Free money + FOMO — सरकारी लाभ छूट न जाए,WhatsApp+IG
+33,Scheme Bomb,H3,90% किसान {scheme} का पैसा छोड़ देते हैं — आप मत छोड़ना,Free money + FOMO — सरकारी लाभ छूट न जाए,WhatsApp+IG
+34,Scheme Bomb,H4,{scheme} की last date नज़दीक — आज ही apply करो,Free money + FOMO — सरकारी लाभ छूट न जाए,WhatsApp+IG
+35,Scheme Bomb,H5,यह document नहीं है तो {scheme} का पैसा रुक जाएगा,Free money + FOMO — सरकारी लाभ छूट न जाए,WhatsApp+IG
+36,Scheme Bomb,H6,{scheme} + {crop} = डबल फायदा। पूरी जानकारी यहाँ,Free money + FOMO — सरकारी लाभ छूट न जाए,WhatsApp+IG
+37,Jugaad Hack,H1,₹{n} में {crop} का जुगाड़ — 90% किसान नहीं जानते,Curiosity + thrift — सस्ता समाधान,Reels
+38,Jugaad Hack,H2,बिना खर्च {crop} की पैदावार दोगुनी — यह trick देखो,Curiosity + thrift — सस्ता समाधान,Reels
+39,Jugaad Hack,H3,घर की चीज़ों से {crop} की सुरक्षा — कमाल का जुगाड़,Curiosity + thrift — सस्ता समाधान,Reels
+40,Jugaad Hack,H4,यह देसी नुस्खा {crop} के कीट भगा देता है — ₹0 खर्च,Curiosity + thrift — सस्ता समाधान,Reels
+41,Jugaad Hack,H5,{crop} में पानी बचाने का यह जुगाड़ viral हो रहा है,Curiosity + thrift — सस्ता समाधान,Reels
+42,Jugaad Hack,H6,पुरानी बोतल से {crop} की सिंचाई — step by step,Curiosity + thrift — सस्ता समाधान,Reels
+43,Before / After,H1,{crop} खेत: पहले बनाम बाद — यकीन नहीं होगा,Transformation proof — बदलाव दिखता है,Reels+IG
+44,Before / After,H2,6 महीने में यह बदलाव — {crop} किसान ने कैसे किया?,Transformation proof — बदलाव दिखता है,Reels+IG
+45,Before / After,H3,बंजर ज़मीन से हरी-भरी {crop} — पूरी कहानी,Transformation proof — बदलाव दिखता है,Reels+IG
+46,Before / After,H4,मंडी बनाम AgroManch — {crop} किसान का before/after,Transformation proof — बदलाव दिखता है,Reels+IG
+47,Before / After,H5,यह तस्वीर देखो — {crop} में मेहनत का नतीजा,Transformation proof — बदलाव दिखता है,Reels+IG
+48,Before / After,H6,"पहले ₹{n}, अब ₹{n2} — {crop} में क्या बदला?",Transformation proof — बदलाव दिखता है,Reels+IG
+49,Mahila Kisan,H1,'अकेले 3 एकड़ {crop} संभाला' — रेखा देवी की कहानी,Empowerment + pride — महिला सशक्तिकरण,Reels+IG
+50,Mahila Kisan,H2,घूँघट से ट्रैक्टर तक — इस महिला किसान को सलाम,Empowerment + pride — महिला सशक्तिकरण,Reels+IG
+51,Mahila Kisan,H3,"पति बाहर, उसने {crop} से घर चलाया — कैसे?",Empowerment + pride — महिला सशक्तिकरण,Reels+IG
+52,Mahila Kisan,H4,गाँव की महिलाओं ने {crop} से बदली किस्मत,Empowerment + pride — महिला सशक्तिकरण,Reels+IG
+53,Mahila Kisan,H5,महिला किसान + AgroManch = ₹{n} सालाना income,Empowerment + pride — महिला सशक्तिकरण,Reels+IG
+54,Mahila Kisan,H6,खेती सिर्फ मर्दों का काम? यह महिला गलत साबित करती है,Empowerment + pride — महिला सशक्तिकरण,Reels+IG
+55,Weather Emergency,H1,🚨 {region} Alert: 72 घंटे में मौसम — {crop} बचाओ!,Fear + urgency — मौसम से नुकसान,Reels+IG
+56,Weather Emergency,H2,बारिश से पहले {crop} में यह करना ज़रूरी है,Fear + urgency — मौसम से नुकसान,Reels+IG
+57,Weather Emergency,H3,ओलावृष्टि का खतरा — {crop} किसान तुरंत यह करो,Fear + urgency — मौसम से नुकसान,Reels+IG
+58,Weather Emergency,H4,🚨 तूफान आ रहा है — खड़ी {crop} कैसे बचाएँ?,Fear + urgency — मौसम से नुकसान,Reels+IG
+59,Weather Emergency,H5,मौसम बदलते ही {crop} पर यह असर — तैयार रहो,Fear + urgency — मौसम से नुकसान,Reels+IG
+60,Weather Emergency,H6,IMD alert: {region} के {crop} किसान सावधान,Fear + urgency — मौसम से नुकसान,Reels+IG
+61,Myth Buster,H1,{crop} के बारे में यह बात झूठ है — सच जानो,Authority + surprise — गलतफहमी दूर,Reels+IG
+62,Myth Buster,H2,हर किसान यह गलती करता है {crop} में — रुको,Authority + surprise — गलतफहमी दूर,Reels+IG
+63,Myth Buster,H3,'ज़्यादा खाद = ज़्यादा फसल'? बिल्कुल गलत,Authority + surprise — गलतफहमी दूर,Reels+IG
+64,Myth Buster,H4,{crop} में यह मिथक आपका नुकसान करा रहा है,Authority + surprise — गलतफहमी दूर,Reels+IG
+65,Myth Buster,H5,कृषि वैज्ञानिक बता रहे हैं — {crop} का असली सच,Authority + surprise — गलतफहमी दूर,Reels+IG
+66,Myth Buster,H6,सालों से गलत कर रहे हो? {crop} की सच्चाई यहाँ,Authority + surprise — गलतफहमी दूर,Reels+IG
+67,Profit Calculator,H1,{crop} में 1 एकड़ = कितना मुनाफा? पूरा हिसाब,Logic + greed — सटीक कमाई का गणित,Reels+IG
+68,Profit Calculator,H2,"लागत ₹{n}, कमाई ₹{n2} — {crop} का गणित समझो",Logic + greed — सटीक कमाई का गणित,Reels+IG
+69,Profit Calculator,H3,{crop} बोने से पहले यह calculation ज़रूर देखो,Logic + greed — सटीक कमाई का गणित,Reels+IG
+70,Profit Calculator,H4,कौन सी फसल ज़्यादा देगी? {crop} बनाम बाकी,Logic + greed — सटीक कमाई का गणित,Reels+IG
+71,Profit Calculator,H5,"₹{n} लगाओ, ₹{n2} कमाओ — {crop} का सच्चा हिसाब",Logic + greed — सटीक कमाई का गणित,Reels+IG
+72,Profit Calculator,H6,AgroManch calculator से {crop} का मुनाफा निकालो,Logic + greed — सटीक कमाई का गणित,Reels+IG
+73,Field Interview,H1,खेत से सीधे: {region} के किसान क्या कह रहे हैं?,Authenticity — असली किसान की आवाज़,Reels+IG
+74,Field Interview,H2,इस {crop} किसान से मिलिए — बात दिल छू जाएगी,Authenticity — असली किसान की आवाज़,Reels+IG
+75,Field Interview,H3,'मैं बताता हूँ {crop} में असली दिक्कत क्या है',Authenticity — असली किसान की आवाज़,Reels+IG
+76,Field Interview,H4,गाँव-गाँव घूमकर पूछा — {crop} पर किसानों का जवाब,Authenticity — असली किसान की आवाज़,Reels+IG
+77,Field Interview,H5,{region} का यह किसान {crop} पर बेबाक बोला,Authenticity — असली किसान की आवाज़,Reels+IG
+78,Field Interview,H6,कैमरे के सामने किसान ने खोले {crop} के राज़,Authenticity — असली किसान की आवाज़,Reels+IG
+79,Old vs New,H1,{crop} बेचने का पुराना तरीका vs AgroManch — 5 घंटे vs 5 मिनट,Progress + identity — आधुनिक बनो,Reels+IG
+80,Old vs New,H2,बैलगाड़ी से ड्रोन तक — {crop} खेती कितनी बदली,Progress + identity — आधुनिक बनो,Reels+IG
+81,Old vs New,H3,पिताजी का तरीका बनाम नया तरीका — {crop} में फर्क,Progress + identity — आधुनिक बनो,Reels+IG
+82,Old vs New,H4,{crop} में पुरानी सोच छोड़ो — यह है नया रास्ता,Progress + identity — आधुनिक बनो,Reels+IG
+83,Old vs New,H5,10 साल पहले vs आज — {crop} किसान की ज़िंदगी,Progress + identity — आधुनिक बनो,Reels+IG
+84,Old vs New,H6,मंडी का इंतज़ार बनाम App पर बिक्री — {crop} देखो,Progress + identity — आधुनिक बनो,Reels+IG
+85,Hidden Crop,H1,यह फसल ₹{n}/kg बिकती है — कोई {region} में नहीं उगाता क्यों?,Curiosity + opportunity — नई कमाई,Reels+IG
+86,Hidden Crop,H2,{crop} छोड़ो — यह फसल 3 गुना कमाई देती है,Curiosity + opportunity — नई कमाई,Reels+IG
+87,Hidden Crop,H3,विदेश में इस फसल की भारी मांग — आप क्यों चूक रहे?,Curiosity + opportunity — नई कमाई,Reels+IG
+88,Hidden Crop,H4,"कम पानी, ज़्यादा दाम — यह छुपी फसल जानो",Curiosity + opportunity — नई कमाई,Reels+IG
+89,Hidden Crop,H5,1 एकड़ में ₹{n} — यह फसल कोई नहीं बताता,Curiosity + opportunity — नई कमाई,Reels+IG
+90,Hidden Crop,H6,AgroManch पर इस फसल के {n} buyers इंतज़ार में हैं,Curiosity + opportunity — नई कमाई,Reels+IG
+91,Tech Tutorial,H1,AgroManch पर {crop} list करो — 5 मिनट tutorial,"Mastery + ease — डर खत्म, सीखो",Reels+IG
+92,Tech Tutorial,H2,पहली बार App इस्तेमाल कर रहे? यह देखो — आसान है,"Mastery + ease — डर खत्म, सीखो",Reels+IG
+93,Tech Tutorial,H3,{crop} की photo कैसे डालें कि ज़्यादा दाम मिले,"Mastery + ease — डर खत्म, सीखो",Reels+IG
+94,Tech Tutorial,H4,App पर payment कैसे आता है? step by step Hindi में,"Mastery + ease — डर खत्म, सीखो",Reels+IG
+95,Tech Tutorial,H5,5 मिनट में {crop} बेचना सीखो — बिना confusion,"Mastery + ease — डर खत्म, सीखो",Reels+IG
+96,Tech Tutorial,H6,AgroManch के यह 5 features {crop} किसान ज़रूर use करें,"Mastery + ease — डर खत्म, सीखो",Reels+IG
+97,Award / Recognition,H1,🏆 Kisan Star of the Week — {region} के किसान को बधाई!,Recognition + loyalty — सम्मान की चाह,Reels+IG
+98,Award / Recognition,H2,इस {crop} किसान ने देश का नाम रोशन किया 🏆,Recognition + loyalty — सम्मान की चाह,Reels+IG
+99,Award / Recognition,H3,सरकार ने सम्मानित किया — यह किसान कौन है?,Recognition + loyalty — सम्मान की चाह,Reels+IG
+100,Award / Recognition,H4,गाँव का गर्व — {crop} में राष्ट्रीय पुरस्कार,Recognition + loyalty — सम्मान की चाह,Reels+IG
+101,Award / Recognition,H5,आपका नाम भी यहाँ हो सकता है — nominate करो,Recognition + loyalty — सम्मान की चाह,Reels+IG
+102,Award / Recognition,H6,मेहनत रंग लाई — {region} के किसान की जीत 🏆,Recognition + loyalty — सम्मान की चाह,Reels+IG
+103,Regional Language,H1,किसान भाई — आज {lang} में {crop} की बात,Local identity — अपनी भाषा अपनापन,Reels+IG
+104,Regional Language,H2,{lang} में सुनो: AgroManch पर {crop} कैसे बेचें,Local identity — अपनी भाषा अपनापन,Reels+IG
+105,Regional Language,H3,अपनी भाषा में खेती की पूरी जानकारी — {lang},Local identity — अपनी भाषा अपनापन,Reels+IG
+106,Regional Language,H4,{region} के किसानों के लिए {lang} में खास video,Local identity — अपनी भाषा अपनापन,Reels+IG
+107,Regional Language,H5,{lang} बोलने वाले किसान यह ज़रूर देखें,Local identity — अपनी भाषा अपनापन,Reels+IG
+108,Regional Language,H6,घर जैसी भाषा में {crop} का गुर — {lang} में,Local identity — अपनी भाषा अपनापन,Reels+IG
+109,Community Debate,H1,सच बोलो — {crop} मंडी में सही भाव मिलता है? Poll 👇,Belonging + opinion — आवाज़ रखो,Reels+IG
+110,Community Debate,H2,आप किससे बेचते हो {crop}? Comment में बताओ,Belonging + opinion — आवाज़ रखो,Reels+IG
+111,Community Debate,H3,{crop} की सबसे बड़ी दिक्कत क्या है? खुलकर लिखो,Belonging + opinion — आवाज़ रखो,Reels+IG
+112,Community Debate,H4,मंडी बनाम App — आप किसके साथ हो? Vote करो,Belonging + opinion — आवाज़ रखो,Reels+IG
+113,Community Debate,H5,किसान की सबसे बड़ी समस्या? आपकी आवाज़ चाहिए,Belonging + opinion — आवाज़ रखो,Reels+IG
+114,Community Debate,H6,{crop} पर आपका अनुभव — हर comment पढ़ते हैं,Belonging + opinion — आवाज़ रखो,Reels+IG
+115,Seasonal Countdown,H1,{crop} बुवाई में बस {n} दिन बाकी — तैयारी शुरू!,Urgency + timing — सही समय चूको मत,Reels+IG
+116,Seasonal Countdown,H2,{crop} बेचने का सही समय आ रहा — भाव बढ़ेंगे,Urgency + timing — सही समय चूको मत,Reels+IG
+117,Seasonal Countdown,H3,मौसम बदल रहा — {crop} के लिए यह आखिरी मौका,Urgency + timing — सही समय चूको मत,Reels+IG
+118,Seasonal Countdown,H4,{n} दिन में {crop} का सीज़न — यह checklist देखो,Urgency + timing — सही समय चूको मत,Reels+IG
+119,Seasonal Countdown,H5,त्योहार से पहले {crop} के दाम चढ़ेंगे — तैयार रहो,Urgency + timing — सही समय चूको मत,Reels+IG
+120,Seasonal Countdown,H6,देर मत करो — {crop} की सही timing निकल रही है,Urgency + timing — सही समय चूको मत,Reels+IG

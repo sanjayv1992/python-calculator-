@@ -649,8 +649,505 @@ ws[f"A{fn}"].fill = fill(AMBER_LIGHT); ws[f"A{fn}"].font = body_font(10, True); 
 widths(ws, [13,8,20,34,22,16,24,28])
 
 # ══════════════════════════════════════════════════════════════════════════════
-wb.save("/home/user/python-calculator-/AgroManch_Master_System.xlsx")
-print("✅ Saved: AgroManch_Master_System.xlsx")
-print("Sheets:", wb.sheetnames)
-print(f"Reels:{len(reel_rows)} Carousel:{len(carousel_rows)} Static:{len(static_rows)} Story:{len(story_rows)} Engagement:{len(engage_rows)} News:{len(news)} Calendar:{len(cal_rows)}")
-print("Total content ideas:", len(reel_rows)+len(carousel_rows)+len(static_rows)+len(story_rows)+len(engage_rows))
+# CROP HASHTAG MAP
+# ══════════════════════════════════════════════════════════════════════════════
+CROP_TAG = {
+    "गेहूं":"Wheat","धान":"Paddy","मक्का":"Maize","सोयाबीन":"Soybean","कपास":"Cotton",
+    "गन्ना":"Sugarcane","टमाटर":"Tomato","प्याज":"Onion","आलू":"Potato","मिर्च":"Chilli",
+    "सरसों":"Mustard","चना":"Gram","मूंग":"Moong","बाजरा":"Bajra","ज्वार":"Jowar",
+    "हल्दी":"Turmeric","अदरक":"Ginger","लहसुन":"Garlic","केला":"Banana","अनार":"Pomegranate",
+    "Dragon Fruit":"DragonFruit","स्ट्रॉबेरी":"Strawberry","मशरूम":"Mushroom","सब्ज़ी":"Vegetables",
+    "भिंडी":"Okra","बैंगन":"Brinjal","फूलगोभी":"Cauliflower","मटर":"Peas","अरहर":"Arhar","मूंगफली":"Groundnut",
+}
+def hashtag_set_for(crop, pattern):
+    base = ["#Kisan","#AgroManch"]
+    ct = CROP_TAG.get(crop, "Farming")
+    cat = {
+        "Mandi Shock":"#MandiBhav","Scheme Bomb":"#SarkariYojana","Crop Emergency Alert":"#FasalRog",
+        "Weather Emergency":"#MausamAlert","Mahila Kisan":"#MahilaKisan","Jugaad Hack":"#FarmingHacks",
+        "Hidden Crop":"#ProfitableFarming","Tech Tutorial":"#DigitalKisan","Profit Calculator":"#KhetiProfit",
+        "Regional Language":"#Bhojpuri",
+    }.get(pattern, "#Kheti")
+    return f"#{ct} {base[0]} {cat} {base[1]} #IndianFarmer"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SHEET: 🎯 VIRAL HOOK LIBRARY
+# ══════════════════════════════════════════════════════════════════════════════
+HOOK_LIBRARY = {
+"Profit Reveal":[
+ "इस किसान ने {crop} से ₹{n} लाख कमाए — कैसे? पूरा हिसाब देखो",
+ "1 एकड़ {crop} = ₹{n}? यकीन नहीं होगा लेकिन सच है",
+ "{crop} बेचकर इस किसान ने नई गाड़ी खरीदी — राज़ क्या है?",
+ "मंडी से दोगुना दाम — {crop} में यह तरीका कोई नहीं बताता",
+ "₹{n} extra हर quintal — {crop} किसान यह गलती मत करना",
+ "गाँव वाले हँसते थे — आज {crop} से सबसे ज़्यादा कमाता है"],
+"Mandi Shock":[
+ "{crop} मंडी में ₹{n}/kg — AgroManch पर ₹{n2}! फर्क देखो 🔴🟢",
+ "रुको! {crop} मंडी ले जाने से पहले यह video देखो",
+ "मंडी में आपका {crop} ₹{n} में बिका — असली कीमत ₹{n2} थी",
+ "7 बिचौलिए आपके {crop} का मुनाफा खा रहे हैं — proof देखो",
+ "मंडी की पर्ची दिखाता हूँ — {crop} पर कितनी लूट हुई",
+ "{crop} का सही भाव क्या है? मंडी आपको कभी नहीं बताएगी"],
+"Crop Emergency Alert":[
+ "🚨 {region} में {crop} पर रोग फैल रहा — 72 घंटे में यह करो",
+ "आपकी {crop} की पत्तियाँ ऐसी हैं? तुरंत रुको और देखो",
+ "एक हफ्ते में पूरी {crop} बर्बाद — यह कीट पहचानो",
+ "🚨 {crop} किसान alert: यह लक्षण दिखे तो देर मत करना",
+ "पड़ोसी की {crop} चौपट हो गई — आपकी कैसे बचेगी?",
+ "{crop} में यह दाग = खतरे की घंटी। इलाज यहाँ देखो"],
+"Farmer Success Story":[
+ "'पहले डर था online बेचने का — आज {crop} से खुशी है'",
+ "{region} के इस किसान की कहानी आपको रुला देगी",
+ "कर्ज़ में डूबा किसान — {crop} ने ज़िंदगी बदल दी",
+ "मज़दूरी छोड़ी, {crop} अपनाई — आज लाखों कमाता है",
+ "'मेरे पिता मंडी में लुटते थे — मैंने तरीका बदला'",
+ "500 किसानों ने यह किया — नतीजा देखकर चौंक जाओगे"],
+"Machinery Pride":[
+ "यह मशीन {crop} की लागत आधी कर देती है 😮",
+ "₹{n} की यह मशीन 10 मज़दूरों का काम करती है",
+ "{crop} की कटाई अब 1 घंटे में — कैसे? देखो",
+ "पुराना तरीका भूल जाओ — {crop} के लिए यह मशीन",
+ "subsidy पर मिलती है यह मशीन — {crop} किसान ध्यान दो",
+ "इस जुगाड़ मशीन ने {region} के किसान का खेल बदल दिया"],
+"Scheme Bomb":[
+ "🚨 {scheme} — किस्त आ रही है, status अभी check करो!",
+ "{scheme} में ₹{n} सीधे खाते में — eligibility देखो",
+ "90% किसान {scheme} का पैसा छोड़ देते हैं — आप मत छोड़ना",
+ "{scheme} की last date नज़दीक — आज ही apply करो",
+ "यह document नहीं है तो {scheme} का पैसा रुक जाएगा",
+ "{scheme} + {crop} = डबल फायदा। पूरी जानकारी यहाँ"],
+"Jugaad Hack":[
+ "₹{n} में {crop} का जुगाड़ — 90% किसान नहीं जानते",
+ "बिना खर्च {crop} की पैदावार दोगुनी — यह trick देखो",
+ "घर की चीज़ों से {crop} की सुरक्षा — कमाल का जुगाड़",
+ "यह देसी नुस्खा {crop} के कीट भगा देता है — ₹0 खर्च",
+ "{crop} में पानी बचाने का यह जुगाड़ viral हो रहा है",
+ "पुरानी बोतल से {crop} की सिंचाई — step by step"],
+"Before / After":[
+ "{crop} खेत: पहले बनाम बाद — यकीन नहीं होगा",
+ "6 महीने में यह बदलाव — {crop} किसान ने कैसे किया?",
+ "बंजर ज़मीन से हरी-भरी {crop} — पूरी कहानी",
+ "मंडी बनाम AgroManch — {crop} किसान का before/after",
+ "यह तस्वीर देखो — {crop} में मेहनत का नतीजा",
+ "पहले ₹{n}, अब ₹{n2} — {crop} में क्या बदला?"],
+"Mahila Kisan":[
+ "'अकेले 3 एकड़ {crop} संभाला' — रेखा देवी की कहानी",
+ "घूँघट से ट्रैक्टर तक — इस महिला किसान को सलाम",
+ "पति बाहर, उसने {crop} से घर चलाया — कैसे?",
+ "गाँव की महिलाओं ने {crop} से बदली किस्मत",
+ "महिला किसान + AgroManch = ₹{n} सालाना income",
+ "खेती सिर्फ मर्दों का काम? यह महिला गलत साबित करती है"],
+"Weather Emergency":[
+ "🚨 {region} Alert: 72 घंटे में मौसम — {crop} बचाओ!",
+ "बारिश से पहले {crop} में यह करना ज़रूरी है",
+ "ओलावृष्टि का खतरा — {crop} किसान तुरंत यह करो",
+ "🚨 तूफान आ रहा है — खड़ी {crop} कैसे बचाएँ?",
+ "मौसम बदलते ही {crop} पर यह असर — तैयार रहो",
+ "IMD alert: {region} के {crop} किसान सावधान"],
+"Myth Buster":[
+ "{crop} के बारे में यह बात झूठ है — सच जानो",
+ "हर किसान यह गलती करता है {crop} में — रुको",
+ "'ज़्यादा खाद = ज़्यादा फसल'? बिल्कुल गलत",
+ "{crop} में यह मिथक आपका नुकसान करा रहा है",
+ "कृषि वैज्ञानिक बता रहे हैं — {crop} का असली सच",
+ "सालों से गलत कर रहे हो? {crop} की सच्चाई यहाँ"],
+"Profit Calculator":[
+ "{crop} में 1 एकड़ = कितना मुनाफा? पूरा हिसाब",
+ "लागत ₹{n}, कमाई ₹{n2} — {crop} का गणित समझो",
+ "{crop} बोने से पहले यह calculation ज़रूर देखो",
+ "कौन सी फसल ज़्यादा देगी? {crop} बनाम बाकी",
+ "₹{n} लगाओ, ₹{n2} कमाओ — {crop} का सच्चा हिसाब",
+ "AgroManch calculator से {crop} का मुनाफा निकालो"],
+"Field Interview":[
+ "खेत से सीधे: {region} के किसान क्या कह रहे हैं?",
+ "इस {crop} किसान से मिलिए — बात दिल छू जाएगी",
+ "'मैं बताता हूँ {crop} में असली दिक्कत क्या है'",
+ "गाँव-गाँव घूमकर पूछा — {crop} पर किसानों का जवाब",
+ "{region} का यह किसान {crop} पर बेबाक बोला",
+ "कैमरे के सामने किसान ने खोले {crop} के राज़"],
+"Old vs New":[
+ "{crop} बेचने का पुराना तरीका vs AgroManch — 5 घंटे vs 5 मिनट",
+ "बैलगाड़ी से ड्रोन तक — {crop} खेती कितनी बदली",
+ "पिताजी का तरीका बनाम नया तरीका — {crop} में फर्क",
+ "{crop} में पुरानी सोच छोड़ो — यह है नया रास्ता",
+ "10 साल पहले vs आज — {crop} किसान की ज़िंदगी",
+ "मंडी का इंतज़ार बनाम App पर बिक्री — {crop} देखो"],
+"Hidden Crop":[
+ "यह फसल ₹{n}/kg बिकती है — कोई {region} में नहीं उगाता क्यों?",
+ "{crop} छोड़ो — यह फसल 3 गुना कमाई देती है",
+ "विदेश में इस फसल की भारी मांग — आप क्यों चूक रहे?",
+ "कम पानी, ज़्यादा दाम — यह छुपी फसल जानो",
+ "1 एकड़ में ₹{n} — यह फसल कोई नहीं बताता",
+ "AgroManch पर इस फसल के {n} buyers इंतज़ार में हैं"],
+"Tech Tutorial":[
+ "AgroManch पर {crop} list करो — 5 मिनट tutorial",
+ "पहली बार App इस्तेमाल कर रहे? यह देखो — आसान है",
+ "{crop} की photo कैसे डालें कि ज़्यादा दाम मिले",
+ "App पर payment कैसे आता है? step by step Hindi में",
+ "5 मिनट में {crop} बेचना सीखो — बिना confusion",
+ "AgroManch के यह 5 features {crop} किसान ज़रूर use करें"],
+"Award / Recognition":[
+ "🏆 Kisan Star of the Week — {region} के किसान को बधाई!",
+ "इस {crop} किसान ने देश का नाम रोशन किया 🏆",
+ "सरकार ने सम्मानित किया — यह किसान कौन है?",
+ "गाँव का गर्व — {crop} में राष्ट्रीय पुरस्कार",
+ "आपका नाम भी यहाँ हो सकता है — nominate करो",
+ "मेहनत रंग लाई — {region} के किसान की जीत 🏆"],
+"Regional Language":[
+ "किसान भाई — आज {lang} में {crop} की बात",
+ "{lang} में सुनो: AgroManch पर {crop} कैसे बेचें",
+ "अपनी भाषा में खेती की पूरी जानकारी — {lang}",
+ "{region} के किसानों के लिए {lang} में खास video",
+ "{lang} बोलने वाले किसान यह ज़रूर देखें",
+ "घर जैसी भाषा में {crop} का गुर — {lang} में"],
+"Community Debate":[
+ "सच बोलो — {crop} मंडी में सही भाव मिलता है? Poll 👇",
+ "आप किससे बेचते हो {crop}? Comment में बताओ",
+ "{crop} की सबसे बड़ी दिक्कत क्या है? खुलकर लिखो",
+ "मंडी बनाम App — आप किसके साथ हो? Vote करो",
+ "किसान की सबसे बड़ी समस्या? आपकी आवाज़ चाहिए",
+ "{crop} पर आपका अनुभव — हर comment पढ़ते हैं"],
+"Seasonal Countdown":[
+ "{crop} बुवाई में बस {n} दिन बाकी — तैयारी शुरू!",
+ "{crop} बेचने का सही समय आ रहा — भाव बढ़ेंगे",
+ "मौसम बदल रहा — {crop} के लिए यह आखिरी मौका",
+ "{n} दिन में {crop} का सीज़न — यह checklist देखो",
+ "त्योहार से पहले {crop} के दाम चढ़ेंगे — तैयार रहो",
+ "देर मत करो — {crop} की सही timing निकल रही है"],
+}
+
+ws = wb.create_sheet("🎯 Viral Hook Library"); ws.sheet_view.showGridLines = False
+title_bar(ws, "🎯  Viral Hook Library — 120 Hooks (पहले 3 सेकंड)", "F", color=RED_DARK,
+          sub="हर pattern के 6 hooks। {crop}/{region}/{n}/{scheme}/{lang} को आज के topic से replace करो।")
+header_row(ws, 3, ["#","Pattern","Hook #","Hook Template (Hindi)","Psychology","Best Platform"], RED_DARK)
+hook_rows = []
+hn = 0
+for pidx,(pname,*rest) in enumerate(PATTERNS):
+    psy = PATTERNS[pidx][9]
+    plat = {"Profit Reveal":"YouTube+Reel","Mandi Shock":"Reels+WhatsApp","Crop Emergency Alert":"Shorts+WhatsApp",
+            "Scheme Bomb":"WhatsApp+IG","Jugaad Hack":"Reels"}.get(pname,"Reels+IG")
+    for hidx, hk in enumerate(HOOK_LIBRARY[pname], 1):
+        hn += 1
+        hook_rows.append((hn, pname, f"H{hidx}", hk, psy, plat))
+write_table(ws, 4, hook_rows, (lambda i,row: RED_LIGHT if i%2==0 else WHITE), fonts=9)
+ws.freeze_panes = "A4"
+widths(ws, [5,20,8,60,30,18])
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SHEET: 📢 CTA LIBRARY
+# ══════════════════════════════════════════════════════════════════════════════
+CTA_LIBRARY = {
+"App Download":[
+ "AgroManch App download करो — link bio में 👇","अभी download करो — पहली sale free guidance के साथ 📲",
+ "Play Store पर 'AgroManch' search करके download करो","Link description में है — App अभी install करो 👇",
+ "1 मिनट में download — खेती आसान बनाओ 🌾","देर मत करो — App download करके आज ही शुरू करो",
+ "नीचे link पर tap करो और AgroManch पाओ 📲","लाखों किसान जुड़ चुके — आप भी download करो 👇"],
+"Farmer Registration":[
+ "App खोलो → 2 मिनट में registration पूरा करो ✍️","अभी register करो — फसल बेचने का पहला कदम",
+ "मोबाइल नंबर से free registration — आज ही करो","Registration करो और expert से free बात पाओ 👨‍🌾",
+ "नाम, गाँव, फसल — बस 3 चीज़ें भरो, हो गया रजिस्टर","Free में जुड़ो — कोई fees नहीं, registration करो",
+ "register करते ही daily भाव alerts चालू 🔔","एक बार register, ज़िंदगी भर फायदा — अभी करो"],
+"Marketplace Listing":[
+ "अभी फसल list करो — पहली sale आज ही 📲","फसल की photo डालो → भाव तय करो → publish करो",
+ "5 मिनट में listing — सीधे buyer तक पहुँचो","अपनी फसल list करो और सही दाम पाओ 💰",
+ "बिचौलिया हटाओ — App पर सीधे list करो","आज list करो, कल payment — देर मत करो",
+ "listing free है — अपनी फसल अभी डालो 👇","एक listing = कई buyers। अभी शुरू करो"],
+"Buyer-Seller Connect":[
+ "verified buyers से सीधे जुड़ो — App खोलो 🤝","अपने इलाके के buyers देखो — अभी connect करो",
+ "buyer से chat करो, दाम तय करो — सीधे App पर","बड़े खरीदार इंतज़ार में हैं — connect करो",
+ "FPO/exporter से जुड़ो — App → Buyers","बीच का आदमी हटाओ — सीधे buyer से बात करो",
+ "best दाम वाला buyer ढूंढो — अभी देखो 💰","connect करो और आज ही सौदा पक्का करो 🤝"],
+"WhatsApp Growth":[
+ "WhatsApp group join करो — daily भाव alerts 🔔","हमारे WhatsApp community से जुड़ो — link नीचे 👇",
+ "रोज़ की मंडी update WhatsApp पर पाओ — join करो","WhatsApp पर expert tips — group join करो 📲",
+ "किसान भाइयों का सबसे बड़ा WhatsApp group — आओ","free WhatsApp alerts के लिए नीचे tap करो 🔔",
+ "मौसम + भाव + scheme — सब WhatsApp पर, join करो","WhatsApp group में share करो 🙏 और जुड़े रहो"],
+"Brand Authority":[
+ "follow करो — रोज़ भरोसेमंद खेती जानकारी 🌾","AgroManch के साथ बने रहो — सच्ची जानकारी",
+ "Save करो 📌 — यह बाद में काम आएगा","share करो ताकि हर किसान तक पहुँचे 🙏",
+ "हमें follow करो — किसान की आवाज़, किसान का साथ","यह जानकारी फैलाओ — एक किसान की मदद करो",
+ "AgroManch — किसान का भरोसा। जुड़े रहो","comment में बताओ कौन सा topic अगला चाहिए"],
+"Farmer Retention":[
+ "App → Expert section में free सलाह लो 👨‍🌾","रोज़ खोलो AgroManch — नया भाव, नया मौका",
+ "अपनी अगली फसल भी यहीं list करो — भरोसा बनाए रखो","Weather Alert ON करो — फसल सुरक्षित रखो 🔔",
+ "हर हफ्ते नया feature — App update रखो","आपका feedback चाहिए — comment में लिखो",
+ "Kisan rewards पाओ — App में active रहो 🎁","दोस्त को refer करो और दोनों फायदे में रहो 🤝"],
+"Revenue Growth":[
+ "Premium buyers के लिए Grade-A में list करो 💰","ज़्यादा दाम के लिए quality details भरो",
+ "bulk में बेचो — बेहतर rate पाओ App पर","right time पर बेचो — App का price predictor देखो",
+ "storage + sell combo से मुनाफा बढ़ाओ","AgroManch पर बेचो, बेहतर margin पाओ 💰",
+ "अपनी फसल का सही मूल्य पाओ — आज list करो","ज़्यादा कमाओ — बिचौलिया हटाओ, सीधे बेचो"],
+}
+ws = wb.create_sheet("📢 CTA Library"); ws.sheet_view.showGridLines = False
+title_bar(ws, "📢  CTA Library — 64 Calls-to-Action (8 Business Goals)", "E", color=TEAL,
+          sub="हर business goal के 8 CTAs। Asset के objective के हिसाब से चुनो।")
+header_row(ws, 3, ["#","Business Goal","CTA #","CTA Text (Hindi)","Placement"], TEAL)
+cta_rows = []
+cn = 0
+placements = ["Caption end","On-screen card","Pinned comment","Bio link","Voiceover close"]
+for goal, lst in CTA_LIBRARY.items():
+    for ci, c in enumerate(lst, 1):
+        cn += 1
+        cta_rows.append((cn, goal, f"C{ci}", c, cyc(placements, cn)))
+write_table(ws, 4, cta_rows, (lambda i,row: TEAL_LIGHT if i%2==0 else WHITE), fonts=9)
+ws.freeze_panes = "A4"
+widths(ws, [5,22,8,55,18])
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SHEET: #️⃣ HASHTAG ENGINE
+# ══════════════════════════════════════════════════════════════════════════════
+ws = wb.create_sheet("#️⃣ Hashtag Engine"); ws.sheet_view.showGridLines = False
+title_bar(ws, "#️⃣  Hashtag Engine — Banks + Ready 5-Tag Sets", "G", color=PURPLE,
+          sub="Instagram नियम 2025: max 5 targeted hashtags। YouTube: 3-5 description में। Facebook: 2-3।")
+
+# Platform rules
+ws.merge_cells("A3:G3")
+ws["A3"].value = "📏 PLATFORM RULES — Instagram: 5 max (targeted) · YouTube: 3-5 in description · Facebook: 2-3 · WhatsApp: none (text only) · Always include #Kisan + #AgroManch"
+ws["A3"].fill = fill(AMBER_LIGHT); ws["A3"].font = body_font(9, True); ws["A3"].alignment = left(); ws.row_dimensions[3].height = 30
+
+# Banks
+ws.merge_cells("A5:G5"); ws["A5"].value = "🗂️  HASHTAG BANKS (इनमें से mix करो)"; ws["A5"].fill=fill(PURPLE); ws["A5"].font=hdr_font(10,True,WHITE); ws["A5"].alignment=left(); ws.row_dimensions[5].height=20
+header_row(ws, 6, ["Bank","Hashtags"], PURPLE)
+banks = [
+ ("Core Brand (हमेशा)","#AgroManch #Kisan #KisanOfIndia #IndianFarmer #Annadata"),
+ ("General Agri","#Farming #Agriculture #Kheti #KhetiBadi #Krishi #FarmerLife #FarmingIndia #KisanBhai"),
+ ("Mandi / Price","#MandiBhav #FasalRate #MandiPrice #CropPrice #FarmGate"),
+ ("Govt Scheme","#PMKisan #PMFBY #KCC #FasalBima #SarkariYojana #KisanScheme #KisanCreditCard"),
+ ("Crop Emergency","#FasalRog #PestControl #CropDisease #FarmingTips #KisanHelp"),
+ ("Weather","#MausamAlert #WeatherAlert #Monsoon #IMD #CropProtection"),
+ ("Women Farmer","#MahilaKisan #WomenInAgriculture #WomenFarmer #NariShakti"),
+ ("Jugaad / Tips","#FarmingHacks #Jugaad #KhetiTips #DesiJugaad #SmartFarming"),
+ ("Tech / App","#AgriTech #DigitalKisan #SmartFarming #FarmToMarket #AgriBusiness"),
+ ("Reels / Trending","#Reels #ReelsInstagram #Viral #Trending #ExplorePage #FarmingReels"),
+ ("Regional / Language","#UPKisan #BiharKisan #PunjabKisan #Bhojpuri #DesiKheti"),
+ ("Profit / Hidden Crop","#ProfitableFarming #FarmingIdeas #CashCrop #KhetiProfit #ModernFarming"),
+]
+br = 7
+for i,(b,h) in enumerate(banks):
+    r = br+i; ws.row_dimensions[r].height = 22
+    bg = PURPLE_LIGHT if i%2==0 else WHITE
+    cell(ws, r, 1, b, bg, True); cell(ws, r, 2, h, bg)
+    for c in range(3,8): cell(ws, r, c, "", bg)
+    ws.merge_cells(start_row=r, start_column=2, end_row=r, end_column=7)
+
+# Ready 5-tag sets
+sr = br + len(banks) + 1
+ws.merge_cells(f"A{sr}:G{sr}"); ws[f"A{sr}"].value="✅  READY 5-TAG SETS (copy-paste, Instagram-ready)"; ws[f"A{sr}"].fill=fill(GREEN_DARK); ws[f"A{sr}"].font=hdr_font(10,True,WHITE); ws[f"A{sr}"].alignment=left(); ws.row_dimensions[sr].height=20
+header_row(ws, sr+1, ["#","Use For","5-Hashtag Set"], GREEN_DARK)
+ready_sets = [
+ ("Mandi / Price post","#Kisan #AgroManch #MandiBhav #IndianFarmer #Kheti"),
+ ("Govt Scheme post","#PMKisan #Kisan #SarkariYojana #AgroManch #FasalBima"),
+ ("Success Story","#Kisan #Annadata #FarmerSuccess #AgroManch #IndianFarmer"),
+ ("Crop Emergency","#Kisan #FasalRog #Kheti #AgroManch #FarmingTips"),
+ ("Jugaad / Tips","#FarmingHacks #Kisan #Jugaad #AgroManch #KhetiTips"),
+ ("Women Farmer","#MahilaKisan #WomenInAgriculture #Kisan #AgroManch #Annadata"),
+ ("Tech / App tutorial","#AgriTech #DigitalKisan #AgroManch #SmartFarming #Kisan"),
+ ("Hidden / Profit Crop","#Kisan #ProfitableFarming #AgroManch #Kheti #FarmingIdeas"),
+ ("Weather Alert","#MausamAlert #Kisan #Kheti #AgroManch #FarmingTips"),
+ ("Regional (UP/Bihar)","#UPKisan #BiharKisan #Bhojpuri #AgroManch #Kisan"),
+]
+# crop-specific sets
+for crop, tag in CROP_TAG.items():
+    ready_sets.append((f"{crop} post", f"#{tag} #Kisan #AgroManch #Kheti #IndianFarmer"))
+sset = sr+2
+for i,(u,h) in enumerate(ready_sets):
+    r = sset+i; ws.row_dimensions[r].height = 20
+    bg = GREEN_LIGHT if i%2==0 else WHITE
+    cell(ws, r, 1, i+1, bg, True, "000000", "center"); cell(ws, r, 2, u, bg); cell(ws, r, 3, h, bg)
+    for c in range(4,8): cell(ws, r, c, "", bg)
+    ws.merge_cells(start_row=r, start_column=3, end_row=r, end_column=7)
+widths(ws, [6,24,40,8,8,8,8])
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SHEET: 🎬 DAILY REEL GENERATOR (365 days)
+# ══════════════════════════════════════════════════════════════════════════════
+ARCH = {
+ "Profit Reveal":"PROFIT","Profit Calculator":"PROFIT","Hidden Crop":"PROFIT",
+ "Mandi Shock":"SHOCK","Crop Emergency Alert":"SHOCK","Weather Emergency":"SHOCK","Scheme Bomb":"SHOCK",
+ "Farmer Success Story":"STORY","Mahila Kisan":"STORY","Field Interview":"STORY","Award / Recognition":"STORY",
+ "Tech Tutorial":"HOWTO","Jugaad Hack":"HOWTO","Myth Buster":"HOWTO","Old vs New":"HOWTO",
+ "Machinery Pride":"HOWTO","Before / After":"HOWTO",
+ "Community Debate":"COMM","Regional Language":"COMM","Seasonal Countdown":"COMM",
+}
+def reel_beats(arch, crop):
+    if arch=="PROFIT":
+        return [f"[0-3s] बड़ा number + {crop} का खेत — hook text",
+                f"[3-8s] {crop} की लागत दिखाओ (बीज/खाद/मेहनत)",
+                f"[8-18s] कमाई का breakdown — मंडी बनाम AgroManch",
+                f"[18-25s] AgroManch screen — सही दाम कैसे मिला",
+                "[25-30s] CTA card + logo"]
+    if arch=="SHOCK":
+        return ["[0-3s] तेज़ alert visual + bold red text",
+                f"[3-8s] {crop} की पर्ची/लक्षण/आँकड़ा close-up",
+                "[8-16s] नुकसान का असर + किसान की चिंता",
+                f"[16-25s] AgroManch solution — {crop} का रास्ता",
+                "[25-30s] CTA: download / alert ON"]
+    if arch=="STORY":
+        return [f"[0-3s] किसान का चेहरा + {crop} खेत — emotional hook",
+                "[3-10s] संघर्ष — पहले की मुश्किल",
+                "[10-18s] turning point — AgroManch से जुड़ा",
+                "[18-26s] नतीजा — मुस्कान, payment proof",
+                "[26-30s] CTA: 'आपकी कहानी भी' + link"]
+    if arch=="HOWTO":
+        return [f"[0-3s] सवाल hook — '{crop} में यह जानते हो?'",
+                "[3-10s] step 1 / पुराना तरीका दिखाओ",
+                "[10-18s] step 2 / नया तरीका — demo",
+                "[18-26s] नतीजा / फायदा साफ़ दिखाओ",
+                "[26-30s] CTA: App में और जानो"]
+    return [f"[0-3s] सवाल/poll hook — {crop} पर",
+            "[3-10s] context — दो राय रखो",
+            "[10-18s] options/poll graphic",
+            "[18-26s] AgroManch tie-in",
+            "[26-30s] CTA: vote + comment"]
+
+def reel_vo(arch, crop, region):
+    base = {
+     "PROFIT":f"किसान भाइयों, {crop} से असली कमाई कितनी हो सकती है? पूरा हिसाब देखो — और जानो AgroManch पर सही दाम कैसे मिलता है।",
+     "SHOCK":f"रुको! {region} के {crop} किसान यह ज़रूर देखें। समय रहते कदम उठाओ — AgroManch आपके साथ है।",
+     "STORY":f"यह कहानी हर {crop} किसान की हो सकती है। डर से उम्मीद तक — AgroManch के साथ सफर।",
+     "HOWTO":f"{crop} में यह आसान तरीका आपका समय और पैसा दोनों बचाएगा। चलिए step by step देखते हैं।",
+     "COMM":f"{crop} पर आपकी राय सबसे ज़रूरी है। कमेंट में बताओ — हम हर किसान की सुनते हैं।",
+    }
+    return base[arch]
+
+ws = wb.create_sheet("🎬 Daily Reel Generator"); ws.sheet_view.showGridLines = False
+title_bar(ws, "🎬  Daily Reel Generator — 365 Ready Reel Plans", "O", color=ORANGE,
+          sub="हर दिन का पूरा reel: hook + 5 shots + voiceover + on-screen + CTA + hashtags + audio + time")
+reelgen_h = ["Day","Date","Pattern","Hook (0-3s)","Shot 1","Shot 2","Shot 3","Shot 4","Shot 5",
+             "Voiceover (Hindi)","On-Screen Text","CTA","Hashtags (5)","Audio Idea","Best Time"]
+header_row(ws, 3, reelgen_h, ORANGE)
+import random as _r
+audio_ideas = ["Trending Bhojpuri beat","Emotional flute + dholak","Upbeat desi dhun","Suspense build-up",
+               "Folk + modern fusion","Motivational background score","Punjabi dhol drop","Soft acoustic"]
+times_reel = ["08:30 PM","05:00 PM","08:00 PM","07:30 AM","12:00 PM","07:00 PM","09:30 AM"]
+reelgen_rows = []
+for d in range(365):
+    date = (datetime.date(2026,6,7)+datetime.timedelta(days=d)).strftime("%d-%m-%Y")
+    pidx = WEIGHT[d % len(WEIGHT)]
+    pat = PATTERNS[pidx][0]
+    crop = cyc(CROPS, d); region = cyc(REGIONS, d); scheme = cyc(SCHEMES, d); lang = cyc(LANGS, d)
+    hk = cyc(HOOK_LIBRARY[pat], d).format(crop=crop, region=region, n="__", n2="__", scheme=scheme, lang=lang)
+    arch = ARCH[pat]
+    beats = reel_beats(arch, crop)
+    vo = reel_vo(arch, crop, region)
+    onscreen = f"{pat}: {crop} | बड़ा hook text → benefit → CTA"
+    cta = CTA_LIBRARY[cyc(list(CTA_LIBRARY.keys()), d)][d % 8]
+    tags = hashtag_set_for(crop, pat)
+    reelgen_rows.append((d+1, date, pat, hk, *beats, vo, onscreen, cta, tags, cyc(audio_ideas,d), cyc(times_reel,d)))
+write_table(ws, 4, reelgen_rows, (lambda i,row: ORANGE_LIGHT if i%2==0 else WHITE), fonts=8)
+ws.freeze_panes = "C4"
+widths(ws, [5,11,18,34,24,24,24,24,24,40,28,28,30,18,10])
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SHEET: 📝 DAILY POST GENERATOR (365 days)
+# ══════════════════════════════════════════════════════════════════════════════
+ws = wb.create_sheet("📝 Daily Post Generator"); ws.sheet_view.showGridLines = False
+title_bar(ws, "📝  Daily Post Generator — 365 Ready Posts", "N", color=BLUE_DARK,
+          sub="हर दिन का static/carousel/story post: headline + body + layout + CTA + hashtags + image prompt ref")
+postgen_h = ["Day","Date","Format","Pattern","Headline (Hindi)","Body Copy (Hindi)","Layout / Slides",
+             "CTA","Hashtags (5)","Image Prompt Type","Best Time"]
+header_row(ws, 3, postgen_h, BLUE_DARK)
+formats = ["Carousel (6-8 slides)","Static Poster","Story (3-4 slides)","Infographic","Engagement Post"]
+img_types = ["Carousel Cover","Poster","Story graphic","Infographic","Poster"]
+times_post = ["12:00 PM","07:00 PM","06:00 PM","09:30 AM","08:00 PM"]
+postgen_rows = []
+for d in range(365):
+    date = (datetime.date(2026,6,7)+datetime.timedelta(days=d)).strftime("%d-%m-%Y")
+    pidx = WEIGHT[(d+3) % len(WEIGHT)]
+    pat = PATTERNS[pidx][0]
+    crop = cyc(CROPS, d+5); region = cyc(REGIONS, d+2); scheme = cyc(SCHEMES, d+1); lang = cyc(LANGS, d)
+    fi = d % len(formats)
+    fmt = formats[fi]
+    headline = cyc(HOOK_LIBRARY[pat], d+2).format(crop=crop, region=region, n="__", n2="__", scheme=scheme, lang=lang)
+    body = (f"{pat} — {crop}: किसान भाइयों, {cyc(PAINS,d)} का हल AgroManch पर है। "
+            f"सीधे buyer, सही दाम, 72 घंटे में payment। नीचे दिए steps follow करो और आज ही फायदा उठाओ।")
+    layout = {
+        0:"Slide1 hook → Slide2-6 value points → Slide7 proof → Slide8 CTA",
+        1:"बड़ा headline + 1 आँकड़ा + किसान image + CTA bar",
+        2:"Poll → result tease → value → swipe-up CTA",
+        3:"4-step vertical flow + top title + bottom CTA",
+        4:"सवाल + relatable image + 'comment करो' prompt",
+    }[fi]
+    cta = CTA_LIBRARY[cyc(list(CTA_LIBRARY.keys()), d+2)][d % 8]
+    tags = hashtag_set_for(crop, pat)
+    postgen_rows.append((d+1, date, fmt, pat, headline, body, layout, cta, tags, img_types[fi], times_post[fi]))
+write_table(ws, 4, postgen_rows, (lambda i,row: BLUE_LIGHT if i%2==0 else WHITE), fonts=8)
+ws.freeze_panes = "C4"
+widths(ws, [5,11,20,18,34,50,38,28,30,16,10])
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SHEET: 🗓️ 365-DAY CONTENT CALENDAR
+# ══════════════════════════════════════════════════════════════════════════════
+ws = wb.create_sheet("🗓️ 365-Day Calendar"); ws.sheet_view.showGridLines = False
+title_bar(ws, "🗓️  365-Day Master Content Calendar", "P", color=GREEN_DARK,
+          sub="पूरे साल का दिन-प्रतिदिन plan — primary + secondary asset, pattern, platform, objective, trigger")
+cal365_h = ["Day","Date","Weekday","Week","Month Theme","Primary Asset","Pattern","Topic",
+            "Secondary Asset","Platform Mix","Best Time","Objective","Psych Trigger","Festival/Season","Status"]
+header_row(ws, 3, cal365_h, GREEN_DARK)
+MONTH_THEME = {
+ 6:"भरोसा बनाओ (Trust Launch)",7:"समुदाय (Community)",8:"मानसून + फसल सुरक्षा",9:"खरीफ बिक्री",
+ 10:"त्योहार + भाव",11:"रबी बुवाई",12:"साल का अंत + सफलता कहानियाँ",1:"नई शुरुआत + schemes",
+ 2:"बजट + योजनाएँ",3:"रबी कटाई + बिक्री",4:"गर्मी फसल + भंडारण",5:"मंडी रणनीति + तैयारी",
+}
+FESTIVE = {(8,15):"स्वतंत्रता दिवस",(10,2):"गांधी जयंती",(11,1):"दिवाली सीज़न",(1,14):"मकर संक्रांति/पोंगल",
+           (3,8):"होली",(6,5):"विश्व पर्यावरण दिवस",(12,23):"किसान दिवस"}
+sec_cycle = ["Carousel","Story","Engagement Post","Static Poster","Story","WhatsApp Broadcast","Infographic"]
+platmix365 = ["IG+YT Short+WA","IG+FB","IG+WA","YT+IG","IG+FB+WA","IG Story+WA","YT+IG+FB"]
+times365 = ["08:30 PM","05:00 PM","08:00 PM","07:30 AM","09:30 AM","07:00 PM","12:00 PM"]
+cal365_rows = []
+for d in range(365):
+    dt = datetime.date(2026,6,7)+datetime.timedelta(days=d)
+    pidx = WEIGHT[d % len(WEIGHT)]
+    pat = PATTERNS[pidx][0]
+    crop = cyc(CROPS, d)
+    topic = f"{pat}: {crop}"
+    trig = cyc(PSYCH, pidx)
+    fest = FESTIVE.get((dt.month, dt.day), "")
+    cal365_rows.append((
+        d+1, dt.strftime("%d-%m-%Y"), dt.strftime("%a"), f"W{d//7+1}",
+        MONTH_THEME[dt.month], "Reel", pat, topic, cyc(sec_cycle,d),
+        cyc(platmix365,d), cyc(times365,d), cyc(OBJECTIVES,d), trig, fest, "⬜ Pending"))
+def cal365fn(i,row):
+    return AMBER_LIGHT if row[13] else (GREEN_LIGHT if i%7==0 else (WHITE if i%2==0 else GRAY_LIGHT))
+write_table(ws, 4, cal365_rows, cal365fn, fonts=8)
+for i in range(len(cal365_rows)):
+    ws.cell(row=4+i, column=15).font = body_font(9, True, AMBER)
+ws.freeze_panes = "C4"
+widths(ws, [5,11,7,5,22,12,18,24,16,16,10,18,22,16,11])
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SAVE XLSX
+# ══════════════════════════════════════════════════════════════════════════════
+XLSX = "/home/user/python-calculator-/AgroManch_Content_Factory.xlsx"
+wb.save(XLSX)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# EXPORT EVERY SHEET TO CSV  +  ZIP
+# ══════════════════════════════════════════════════════════════════════════════
+import csv, os, zipfile, re
+CSV_DIR = "/home/user/python-calculator-/AgroManch_CSV_Exports"
+os.makedirs(CSV_DIR, exist_ok=True)
+def safe(name):
+    return re.sub(r'[^A-Za-z0-9]+', '_', name).strip('_')
+csv_files = []
+for sh in wb.worksheets:
+    fn = os.path.join(CSV_DIR, safe(sh.title) + ".csv")
+    with open(fn, "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.writer(f)
+        for row in sh.iter_rows(values_only=True):
+            if any(c is not None and str(c).strip() != "" for c in row):
+                w.writerow(["" if c is None else c for c in row])
+    csv_files.append(fn)
+ZIP = "/home/user/python-calculator-/AgroManch_CSV_Exports.zip"
+with zipfile.ZipFile(ZIP, "w", zipfile.ZIP_DEFLATED) as z:
+    for fn in csv_files:
+        z.write(fn, os.path.basename(fn))
+
+print("✅ Saved XLSX:", XLSX)
+print("✅ CSV files:", len(csv_files), "→", CSV_DIR)
+print("✅ ZIP:", ZIP)
+print("Total sheets:", len(wb.sheetnames))
+for s in wb.sheetnames: print("   -", s)
+print(f"Content ideas: {len(reel_rows)+len(carousel_rows)+len(static_rows)+len(story_rows)+len(engage_rows)} | "
+      f"Hooks:{len(hook_rows)} CTAs:{len(cta_rows)} HashtagSets:{len(ready_sets)} "
+      f"ReelGen:{len(reelgen_rows)} PostGen:{len(postgen_rows)} Cal365:{len(cal365_rows)}")

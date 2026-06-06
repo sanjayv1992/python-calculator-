@@ -1,0 +1,13 @@
+﻿📰  News Content Bank — Newsjacking Engine,,,,,,,,
+React fast to agri news → ride the trend → drive downloads. Check sources daily 7 AM.,,,,,,,,
+ID,News Trigger Type,Example Topic,Pattern to Apply,Hook Template,Angle for AgroManch,CTA,Speed,Source to Watch
+NEWS-01,MSP Announcement,सरकार ने MSP बढ़ाया,Scheme Bomb,🚨 MSP बढ़ा! आपकी {crop} पर कितना फायदा?,MSP vs AgroManch real price comparison,भाव calculator App में देखो,Same day,"PIB, Krishi Jagran"
+NEWS-02,Weather / Monsoon,IMD मानसून अलर्ट,Weather Emergency,🚨 {region} में भारी बारिश — फसल बचाओ,District-level alert + expert tips,Weather Alert ON करो 🔔,< 6 hrs,"IMD, Skymet"
+NEWS-03,Mandi Price Spike,प्याज/टमाटर भाव में उछाल,Mandi Shock,प्याज ₹__/kg! बेचने का सही समय अभी?,Real-time AgroManch price + sell now,अभी list करो 📲,< 12 hrs,"Agmarknet, e-NAM"
+NEWS-04,New Govt Scheme,नई किसान योजना लॉन्च,Scheme Bomb,नई योजना — ₹__ सीधे खाते में!,Eligibility + how-to-apply tutorial,Schemes section में check 📋,Same day,"PIB, agricoop.gov.in"
+NEWS-05,Pest / Disease Outbreak,टिड्डी/रोग का प्रकोप,Crop Emergency Alert,🚨 {region} में {crop} पर हमला!,Free expert consult + treatment,Expert को photo भेजो,< 6 hrs,"ICAR, State Agri Dept"
+NEWS-06,Budget / Policy,कृषि बजट घोषणा,Myth Buster,बजट में किसान को क्या मिला? सच,Simple Hindi breakdown of impact,पूरी जानकारी App में,< 24 hrs,"Union Budget, PIB"
+NEWS-07,Success / Award News,किसान को राष्ट्रीय पुरस्कार,Award / Recognition,🏆 इस किसान ने देश का नाम रोशन किया,Inspire + 'you can too' angle,अपनी कहानी share करो,< 24 hrs,"Krishi Jagran, DD Kisan"
+NEWS-08,Export / Demand News,विदेश में भारतीय फसल की मांग,Hidden Crop,यह फसल विदेश में ₹__/kg बिक रही!,Export buyers on AgroManch,Buyers देखो App में,< 24 hrs,"APEDA, Commerce Ministry"
+NEWS-09,Festival / Season,त्योहार पर फसल की मांग,Seasonal Countdown,दिवाली से पहले __ दिन — भाव बढ़ेंगे!,Best selling window prediction,अभी list करो,2-3 days ahead,Market calendar
+NEWS-10,Tech / Innovation,ड्रोन/AI खेती की खबर,Tech Tutorial,ड्रोन से खेती — अब आपके लिए भी,How AgroManch enables access,App में explore करो,< 48 hrs,Agri-tech news
