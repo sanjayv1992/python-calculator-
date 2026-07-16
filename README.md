@@ -1,62 +1,72 @@
-# AgroManch AI Knowledge Engine
+# AgroManch AI Content Factory
 
-A production-oriented **AI knowledge platform for Indian agriculture**, built on
-Google NotebookLM (via the unofficial [`notebooklm-py`](https://github.com/teng-lin/notebooklm-py)
-library). It turns a verified library of ICAR / State Agricultural University /
-KVK documents, government-scheme PDFs, and product labels into **grounded,
-cited** answers and farmer-facing content.
+An **AI Content Factory for Indian agriculture**. **Gemini** generates the
+highest-quality farmer content; **NotebookLM** supplies verified context from
+trusted documents (ICAR, KVK, government PDFs, product labels). One unified,
+grounded pipeline powers both content generation and farmer advisory.
 
-This repository is the foundation for AgroManch's AI services — not a throwaway
-demo. It is modular and async-first so future APIs, AI models, weather/mandi
-providers, and the AgroManch mobile app can integrate without restructuring.
+```
+Research → NotebookLM (retrieval + citations) → Verified Context
+   → Gemini (generation) → full 15-asset content bundle
+   → one-click Publishing (Instagram · Facebook · YouTube Shorts · WhatsApp · Telegram)
+```
+
+Every content request produces a complete, publish-ready bundle grounded in — and
+citing — trusted sources.
+
+## What one request produces
+
+1. Research Summary · 2. Instagram Carousel · 3. Carousel Image Prompts ·
+4. Facebook Post · 5. WhatsApp Broadcast · 6. YouTube Shorts Script ·
+7. Veo Video Prompt · 8. Voiceover Script · 9. Subtitle File (SRT) ·
+10. SEO Keywords · 11. Blog · 12. Podcast Script · 13. Thumbnail Prompt ·
+14. Story Prompt · 15. CTA — plus standalone Hooks, an Image Prompt, and a Reel
+shot list.
+
+`publish()` lays these out into per-platform folders and a `manifest.json` for a
+one-click publishing worker.
 
 ## What AgroManch uses this for
 
-| Capability | What it does | Where |
-| ---------- | ------------ | ----- |
-| **Crop Doctor knowledge** | Diagnose crop problems from symptoms, grounded in disease docs | `examples/agromanch/crop_doctor_assistant.py` |
-| **Farmer AI chat** | Grounded Q&A over the whole knowledge base, Hindi/English | `examples/agromanch/farmer_chatbot.py` |
-| **Disease & pest knowledge** | Identification, thresholds, integrated management | `pest_disease_chat.py` |
-| **Agriculture research** | Fertilizer, weather, mandi, livestock advisories | `fertilizer_advisor.py`, `weather_crop_advisor.py`, `mandi_price_research.py` |
-| **Government Scheme Assistant** | Eligibility & application help from scheme PDFs | `govt_scheme_assistant.py` |
-| **Dealer / advisory assistant** | Label-accurate dose guidance + offline field math | `pesticide_dose_calculator.py` |
-| **Content generation** | Carousels, WhatsApp, YouTube, blogs, podcasts | `examples/agromanch/*_generator.py` |
-| **Internal knowledge search & management** | Bulk-index and query a verified KB | `scripts/index_knowledge.py` |
-| **Future AI services** | Clean service seams for the roadmap | [docs/roadmap.md](docs/roadmap.md) |
+| Capability | Where |
+| ---------- | ----- |
+| **Content factory** (all 15 assets for a topic) | `examples/agromanch/content_factory.py` |
+| **Single-asset generation** (carousel, blog, Shorts, …) | `instagram_carousel_generator.py`, `blog_generator.py`, `youtube_script_generator.py` |
+| **Multilingual broadcasts** (Hindi + English) | `whatsapp_post_generator.py` |
+| **Crop Doctor knowledge** | `crop_doctor_assistant.py` |
+| **Farmer AI chat** | `farmer_chatbot.py` |
+| **Disease & pest, fertilizer, weather, mandi** | `pest_disease_chat.py`, `fertilizer_advisor.py`, `weather_crop_advisor.py`, `mandi_price_research.py` |
+| **Government Scheme / Dealer assistant** | `govt_scheme_assistant.py`, `pesticide_dose_calculator.py` |
+| **Internal knowledge search & indexing** | `scripts/index_knowledge.py` |
 
-Every answer is **grounded only in the indexed documents and returns source
-citations**, so advice is auditable — essential for agriculture.
+Content and advisory share **one AI path** — NotebookLM retrieves, Gemini
+generates. Advisory outputs are the seeds of the future Crop Doctor, Farmer Chat,
+Dealer, and Scheme assistants.
 
-## How it works
+## Grounding rule
 
-```
-Farmer question → NotebookLM Knowledge Base → verified, cited answer
-      → (future Gemini orchestration) → Crop Doctor / Dose Calculator /
-        Weather / Mandi / Scheme & Dealer Assistants / Content Generator
-      → AgroManch mobile app
-```
-
-See [docs/architecture.md](docs/architecture.md) for the full diagram and each
-layer's role. The reusable code lives in `src/agromanch_ai/`; the runnable
-workflows live in `examples/`.
+By default, generation **requires** NotebookLM-verified context, so agricultural
+output stays accurate and cited. Pass `--no-grounding` (or set
+`AGROMANCH_REQUIRE_GROUNDING=false`) to allow Gemini-only output — which is
+clearly marked **UNVERIFIED**.
 
 ## Project structure
 
 ```
-src/agromanch_ai/      Reusable, installable package
-  config.py            Env-driven settings (AGROMANCH_*)
-  logging.py           Structured logging
-  models.py            Typed results (CitedAnswer, GeneratedContent, DoseRecommendation)
-  services/            Async services wrapping notebooklm-py
-  prompts/             Versioned advisory & content prompt templates
-  utils/               Auth check, offline dose math, text/citation helpers
-examples/              Runnable workflows
-  quickstart.py, research_to_podcast.py, study_kit.py   Generic NotebookLM demos
-  agromanch/           14 AgroManch workflows (crop doctor, dose calc, content…)
-knowledge/             Verified knowledge base, 16 domains (indexed into NotebookLM)
-docs/                  architecture, knowledge-sources, mcp-setup, roadmap
-scripts/index_knowledge.py   Idempotent bulk importer
-tests/                Offline unit & smoke tests
+src/agromanch_ai/
+  ai/            Gemini engine, unified generator, content-factory pipeline
+  services/      retrieval (NotebookLM), content, advisory, notebook, artifact(legacy)
+  prompts/       versioned PromptSpec templates (content + advisory)
+  models.py      VerifiedContext, GeneratedContent, ContentBundle, DoseRecommendation
+  config.py      env-driven settings (AGROMANCH_* + GEMINI_*)
+  utils/         auth check, offline dose math, citation/text helpers
+examples/
+  agromanch/     content_factory + 14 workflows (content & advisory)
+  quickstart.py …   raw notebooklm-py library basics (not the AgroManch path)
+knowledge/       verified knowledge base, 16 domains (indexed into NotebookLM)
+docs/            architecture · knowledge-sources · mcp-setup · roadmap
+scripts/index_knowledge.py   idempotent bulk importer
+tests/           offline unit + smoke tests (fakes for Gemini & NotebookLM)
 ```
 
 ## Setup
@@ -64,24 +74,24 @@ tests/                Offline unit & smoke tests
 ### 1. Install
 
 ```bash
-# Recommended: isolated CLI + browser automation for login
-uv tool install "notebooklm-py[browser]"      # or: pipx install "notebooklm-py[browser]"
-
-# Install this project (from the repo root)
 python3 -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev,browser]"
+pip install -e ".[dev,browser]"     # includes google-genai + notebooklm-py[browser]
 ```
 
-### 2. Authenticate with Google (one-time)
+### 2. Credentials — two of them
 
 ```bash
-notebooklm login              # opens a browser for Google sign-in
-notebooklm auth check --test  # verify
+# NotebookLM (retrieval): one-time Google sign-in
+notebooklm login
+notebooklm auth check --test
 
-# Headless server alternatives:
-notebooklm login --browser-cookies chrome     # reuse a logged-in browser
-notebooklm login --master-token --account you@example.com   # unattended/CI
+# Gemini (generation): get a key from Google AI Studio
+export GEMINI_API_KEY=your-key       # or GOOGLE_API_KEY
 ```
+
+Copy `.env.example` to `.env` to configure the model (`gemini-2.5-flash` default,
+`gemini-2.5-pro` for max quality), language (`en`/`hi`), grounding rule, and
+output directory.
 
 ### 3. Build the knowledge base
 
@@ -93,58 +103,52 @@ python scripts/index_knowledge.py
 export AGROMANCH_NOTEBOOK_ID=<id printed by the script>   # optional, speeds up runs
 ```
 
-How indexing works: each document in `knowledge/` becomes a NotebookLM
-*source*. `.md`/`.txt` are added as text, `.pdf`/office files are uploaded, and
-`urls.txt` files add web sources. NotebookLM parses, chunks, and embeds them;
-queries retrieve the most relevant chunks and answer **only** from them,
-returning citations. The importer is idempotent — re-run it as you add
-documents. Details in [knowledge/README.md](knowledge/README.md).
+Indexing: each document becomes a NotebookLM *source*; the retrieval layer pulls
+the relevant, cited facts per topic and hands them to Gemini. Details in
+[knowledge/README.md](knowledge/README.md).
 
-### 4. Configure (optional)
-
-Copy `.env.example` to `.env` and adjust `AGROMANCH_*` variables (notebook name,
-language `en`/`hi`, output directory, timeouts). No secrets go here — Google auth
-is handled entirely by `notebooklm login`.
-
-### 5. Run a workflow
+### 4. Run the factory
 
 ```bash
+python examples/agromanch/content_factory.py --topic "Fall Armyworm control in maize"
+# advisory on the same pipeline:
 python examples/agromanch/crop_doctor_assistant.py --crop rice --region "West Bengal"
 python examples/agromanch/pesticide_dose_calculator.py --offline --acres 2.5
-python examples/agromanch/instagram_carousel_generator.py --topic "drip irrigation"
-python examples/agromanch/farmer_chatbot.py
 ```
 
 ## Use from Claude / MCP
 
-The knowledge base is queryable directly from Claude Code / claude.ai via the
-NotebookLM MCP server — including content generation. Setup and example prompts
-(*"Explain Fall Armyworm in Hindi"*, *"Generate an Instagram carousel"*,
-*"Create a WhatsApp farmer message"*) are in [docs/mcp-setup.md](docs/mcp-setup.md).
+The verified knowledge base is queryable from Claude Code / claude.ai via the
+NotebookLM MCP server — useful for exploring sources and drafting interactively.
+Setup and example prompts are in [docs/mcp-setup.md](docs/mcp-setup.md).
 
 ## Testing
 
-Offline unit and smoke tests (no Google login needed) cover config, prompt
-rendering, models, dose math, citation extraction, and imports:
+Offline unit + smoke tests (no API key, no network — Gemini and NotebookLM are
+faked): grounding logic, the full 15-asset bundle and publishing manifest, prompt
+rendering, models, dose math, and imports.
 
 ```bash
 pytest
 ```
 
-Live NotebookLM workflows require `notebooklm login` and are exercised by
-running the example scripts.
+Live runs require `notebooklm login` + `GEMINI_API_KEY` and are exercised by the
+example scripts.
 
 ## Roadmap
 
-Phase 1 (this repo) → Farmer AI Chat → Crop Doctor AI → Content Automation →
-Podcast Generation → Voice AI → AgroManch AI Operating System. See
-[docs/roadmap.md](docs/roadmap.md).
+Content Factory (this repo) → Farmer AI Chat → Crop Doctor AI → Content
+Automation at scale → Media Generation (Imagen/Veo/TTS) → Voice AI → AgroManch AI
+Operating System. See [docs/roadmap.md](docs/roadmap.md).
 
-## Disclaimer
+## Scope & disclaimer
 
-`notebooklm-py` uses **undocumented Google APIs** that can change without
-notice and is **not affiliated with Google**. Treat this platform as
-prototype-grade for research and internal use. Agricultural advice generated
-here must be reviewed against official sources; always follow registered
-pesticide labels and confirm critical decisions with your local KVK or
-agriculture officer.
+Every bundle item is Gemini **text** — copy, scripts, SRT, and *prompts* for
+images/video. Rendering images (Imagen), video (Veo), or audio (TTS) and posting
+to platforms are documented integration seams, not part of the core pipeline.
+
+`notebooklm-py` uses **undocumented Google APIs** that can change without notice
+and is **not affiliated with Google**. Treat this as prototype-grade for research
+and internal use. Review all generated agricultural content against official
+sources; always follow registered pesticide labels and confirm critical decisions
+with your local KVK or agriculture officer.

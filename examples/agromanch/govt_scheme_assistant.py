@@ -29,9 +29,8 @@ async def main() -> None:
     args = parser.parse_args()
 
     async with agromanch_session() as ctx:
-        answer = await ctx.chat.ask_template(
+        answer = await ctx.advisory.govt_scheme(
             ctx.notebook.id,
-            "govt_scheme",
             farmer_profile=args.profile,
             question=args.question,
         )

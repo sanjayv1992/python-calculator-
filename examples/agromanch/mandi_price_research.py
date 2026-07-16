@@ -32,9 +32,8 @@ async def main() -> None:
             src = await ctx.notebooks.add_url(ctx.notebook.id, args.add_source_url)
             print(f"Indexed new market report: {src.title}\n")
 
-        answer = await ctx.chat.ask_template(
+        answer = await ctx.advisory.mandi(
             ctx.notebook.id,
-            "mandi_research",
             commodity=args.commodity,
             region=args.region,
         )

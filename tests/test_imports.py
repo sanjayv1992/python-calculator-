@@ -1,12 +1,11 @@
-"""Smoke tests: every module and example script imports without network access.
+"""Smoke tests: every module and example script imports/compiles offline.
 
-These guard against typos and API drift in the reusable code. Example scripts
-under examples/agromanch/ import `_common`, so they are exercised by compiling
-rather than importing (importing would require the package's sibling path).
+These guard against typos and API drift. The Gemini and NotebookLM clients are
+never constructed here (no key, no network) — only imports and compilation.
 """
 
-import importlib
 import compileall
+import importlib
 from pathlib import Path
 
 import pytest
@@ -16,13 +15,19 @@ PACKAGE_MODULES = [
     "agromanch_ai.config",
     "agromanch_ai.logging",
     "agromanch_ai.models",
+    "agromanch_ai.ai",
+    "agromanch_ai.ai.engine",
+    "agromanch_ai.ai.generator",
+    "agromanch_ai.ai.pipeline",
     "agromanch_ai.prompts",
+    "agromanch_ai.prompts.spec",
     "agromanch_ai.prompts.advisory_prompts",
     "agromanch_ai.prompts.content_prompts",
     "agromanch_ai.services",
     "agromanch_ai.services.notebook_service",
-    "agromanch_ai.services.chat_service",
+    "agromanch_ai.services.retrieval_service",
     "agromanch_ai.services.content_service",
+    "agromanch_ai.services.advisory_service",
     "agromanch_ai.services.artifact_service",
     "agromanch_ai.utils",
     "agromanch_ai.utils.authcheck",

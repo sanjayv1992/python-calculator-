@@ -1,8 +1,14 @@
 # MCP Setup — AgroManch Knowledge Base in Claude Code / claude.ai
 
 `notebooklm-py` ships an **MCP server**, so once your AgroManch knowledge base
-is indexed you can query it — and generate content from it — directly from
-Claude Code, Claude Desktop, or (via a tunnel) claude.ai and ChatGPT.
+is indexed you can query the verified retrieval layer directly from Claude Code,
+Claude Desktop, or (via a tunnel) claude.ai and ChatGPT.
+
+> Architecture note: in AgroManch, NotebookLM is the **retrieval** layer and
+> **Gemini** is the generation engine (see [architecture.md](architecture.md)).
+> The MCP server is the quickest way to explore what the knowledge base contains
+> and to draft content interactively; the production factory runs Gemini over the
+> retrieved context via the Python services in `src/agromanch_ai/`.
 
 ## 1. Install and authenticate
 

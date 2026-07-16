@@ -22,16 +22,20 @@ async def main() -> None:
     args = parser.parse_args()
 
     async with agromanch_session() as ctx:
-        pack = await ctx.content.generate_bundle(
-            ctx.notebook.id,
-            ["youtube_shorts_script", "youtube_description", "seo_keywords"],
-            args.topic,
-        )
-        for content in pack:
+        # Retrieve verified context once, reuse it across the whole YouTube pack.
+        context = await ctx.generator.get_context(ctx.notebook.id, args.topic)
+        script = None
+        for kind in ("youtube_shorts_script", "thumbnail_prompt", "seo_keywords"):
+            content = await ctx.content.generate(
+                ctx.notebook.id, kind, args.topic, context=context
+            )
             path = ctx.content.save(content)
-            print(f"Saved {content.kind}: {path}")
-        print("\n--- Shorts script preview ---\n")
-        print(pack[0].to_markdown())
+            print(f"Saved {kind}: {path}")
+            if kind == "youtube_shorts_script":
+                script = content
+        if script:
+            print("\n--- Shorts script preview ---\n")
+            print(script.to_markdown())
 
 
 if __name__ == "__main__":

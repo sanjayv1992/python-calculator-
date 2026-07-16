@@ -21,15 +21,21 @@ async def main() -> None:
     args = parser.parse_args()
 
     async with agromanch_session() as ctx:
-        outline = await ctx.content.generate(ctx.notebook.id, "blog_outline", args.topic)
-        outline_path = ctx.content.save(outline)
-        print(f"Outline saved: {outline_path}\n")
-        print(outline.body[:800])
+        context = await ctx.generator.get_context(ctx.notebook.id, args.topic)
 
-        draft = await ctx.content.generate(ctx.notebook.id, "blog_draft", args.topic)
-        draft_path = ctx.content.save(draft)
-        print(f"\nDraft saved: {draft_path} "
-              f"({len(draft.body.split())} words, {len(draft.references)} cited sources)")
+        blog = await ctx.content.generate(
+            ctx.notebook.id, "blog", args.topic, context=context
+        )
+        blog_path = ctx.content.save(blog)
+        print(f"Blog saved: {blog_path} "
+              f"({len(blog.body.split())} words, {len(blog.references)} cited sources)\n")
+        print(blog.body[:800])
+
+        seo = await ctx.content.generate(
+            ctx.notebook.id, "seo_keywords", args.topic, context=context
+        )
+        seo_path = ctx.content.save(seo)
+        print(f"\nSEO keywords saved: {seo_path}")
 
 
 if __name__ == "__main__":

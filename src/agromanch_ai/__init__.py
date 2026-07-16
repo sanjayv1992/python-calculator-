@@ -9,18 +9,22 @@ Assistant, and agricultural content automation.
 from agromanch_ai.config import Settings
 from agromanch_ai.models import (
     CitedAnswer,
+    ContentBundle,
     DoseRecommendation,
     GeneratedContent,
     SourceRef,
+    VerifiedContext,
 )
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "Settings",
     "CitedAnswer",
+    "ContentBundle",
     "DoseRecommendation",
     "GeneratedContent",
     "SourceRef",
+    "VerifiedContext",
     "__version__",
 ]

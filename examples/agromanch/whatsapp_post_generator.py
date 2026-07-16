@@ -1,8 +1,8 @@
 """WhatsApp broadcast generator: short farmer-group messages, Hindi + English.
 
-Generates the same grounded message in both languages by overriding the
-language setting per run — the pattern AgroManch will use for multilingual
-broadcasts.
+Generates the same grounded message in both languages by building a per-language
+generator over the shared retrieval + Gemini engine — the pattern AgroManch uses
+for multilingual broadcasts.
 
 Run:
     python examples/agromanch/whatsapp_post_generator.py \
@@ -17,7 +17,8 @@ from dataclasses import replace
 
 from _common import agromanch_session
 
-from agromanch_ai.services import ChatService, ContentService
+from agromanch_ai.ai import AgroManchGenerator, GeminiEngine
+from agromanch_ai.services import ContentService
 
 
 async def main() -> None:
@@ -28,9 +29,10 @@ async def main() -> None:
     async with agromanch_session() as ctx:
         for language in ("en", "hi"):
             settings = replace(ctx.settings, language=language)
-            content_service = ContentService(
-                ChatService(ctx.client, settings), settings
+            generator = AgroManchGenerator(
+                ctx.retrieval, GeminiEngine(settings), settings
             )
+            content_service = ContentService(generator, settings)
             message = await content_service.generate(
                 ctx.notebook.id, "whatsapp_broadcast", args.topic
             )

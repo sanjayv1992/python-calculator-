@@ -1,42 +1,40 @@
 # AgroManch AI Roadmap
 
-This repository is **Phase 1**: the verified knowledge base and reusable
-service layer. The phases below build on that foundation without restructuring
-it — each adds a layer the current architecture already leaves a seam for (see
-[architecture.md](architecture.md)).
+This repository is the **AI Content Factory foundation**: Gemini generation
+grounded in NotebookLM-verified sources, one unified pipeline for content and
+advisory. The phases below extend it without restructuring — each adds a layer
+the architecture already leaves a seam for (see [architecture.md](architecture.md)).
 
-## Phase 1 — NotebookLM Knowledge Base ✅ (this repo)
-- Structured `knowledge/` base across 16 agricultural domains.
-- Idempotent indexing into NotebookLM (`scripts/index_knowledge.py`).
-- Reusable async services (notebook, chat, content, artifacts).
-- Grounded, cited answers in English and Hindi.
-- Runnable AgroManch workflow examples and offline dose math.
+## Phase 1 — Content Factory + Verified Knowledge Base ✅ (this repo)
+- Structured `knowledge/` base (16 domains) indexed into NotebookLM.
+- NotebookLM retrieval → `VerifiedContext` with citations.
+- Gemini engine + unified generator (grounding rule enforced).
+- Full 15-asset content bundle per topic + one-click publishing handoff.
+- Advisory workflows (Crop Doctor, schemes, etc.) on the same pipeline.
 
 ## Phase 2 — Farmer AI Chat
-- Wrap `ChatService` in an API (`src/agromanch_ai/api/`) for the mobile app.
-- Conversation history and per-farmer context.
-- Voice/text input in more Indian languages.
+- Wrap the generator/advisory service in an API (`src/agromanch_ai/api/`).
+- Per-farmer context and conversation history.
+- More Indian languages.
 
 ## Phase 3 — Crop Doctor AI
-- Image-based diagnosis (photo → symptom features → grounded diagnosis).
+- Image-based diagnosis (photo → symptoms → grounded Gemini answer).
 - Confidence scoring and "escalate to KVK" routing.
-- Feedback loop to improve knowledge coverage.
 
-## Phase 4 — Content Automation
-- Scheduled, multi-channel content pipelines (Instagram, WhatsApp, YouTube,
-  blog) from `ContentService`.
-- Editorial review and publishing integrations.
+## Phase 4 — Content Automation at scale
+- Scheduled, multi-topic content runs feeding the publishing manifest.
+- Editorial review and real platform-API posting (Instagram/Facebook/YouTube/WhatsApp/Telegram).
 
-## Phase 5 — Podcast Generation
-- Regular farmer-education podcasts via `ArtifactService.generate_podcast`.
-- Multilingual episodes and distribution to the app and YouTube.
+## Phase 5 — Media Generation
+- Plug Imagen (images), Veo (video), and TTS (voiceover) into `publish()` so the
+  factory outputs rendered assets, not just prompts/scripts.
+- Auto-burn subtitles from the generated SRT.
 
 ## Phase 6 — Voice AI
-- Voice-first assistant for low-literacy farmers.
-- Speech-to-text in and text-to-speech out, grounded in the knowledge base.
+- Voice-first assistant for low-literacy farmers (STT in, TTS out), grounded in
+  the same knowledge base.
 
 ## Phase 7 — AgroManch AI Operating System
-- Unified orchestration (Gemini or equivalent) across Crop Doctor, dose
-  calculator, weather, mandi, schemes, and content.
-- Live weather and mandi provider integrations.
-- Dealer and extension-worker assistants on the same knowledge core.
+- Unified orchestration across Crop Doctor, advisories, and the content factory.
+- Live weather/mandi provider integrations; dealer and extension-worker assistants
+  on the same knowledge core.

@@ -19,6 +19,9 @@ DEFAULT_NOTEBOOK_NAME = "AgroManch Knowledge Base"
 DEFAULT_LANGUAGE = "en"
 SUPPORTED_LANGUAGES = ("en", "hi")
 
+DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"  # override to gemini-2.5-pro for max quality
+DEFAULT_GEMINI_TEMPERATURE = 0.7
+
 LANGUAGE_NAMES = {
     "en": "English",
     "hi": "Hindi (हिन्दी)",
@@ -33,6 +36,13 @@ def _env_float(name: str, default: float) -> float:
         return float(raw)
     except ValueError as exc:
         raise ValueError(f"{name} must be a number, got {raw!r}") from exc
+
+
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.environ.get(name)
+    if raw is None or not raw.strip():
+        return default
+    return raw.strip().lower() in ("1", "true", "yes", "on")
 
 
 @dataclass(slots=True)
@@ -59,6 +69,12 @@ class Settings:
     profile: str | None = None
     source_wait_timeout: float = 120.0
     artifact_timeout: float = 600.0
+    # Gemini — the central content-generation engine.
+    gemini_api_key: str | None = None
+    gemini_model: str = DEFAULT_GEMINI_MODEL
+    gemini_temperature: float = DEFAULT_GEMINI_TEMPERATURE
+    # Grounding: require NotebookLM verified context before generating.
+    require_grounding: bool = True
 
     def __post_init__(self) -> None:
         if self.language not in SUPPORTED_LANGUAGES:
@@ -88,6 +104,17 @@ class Settings:
             profile=os.environ.get("AGROMANCH_PROFILE") or None,
             source_wait_timeout=_env_float("AGROMANCH_SOURCE_WAIT_TIMEOUT", 120.0),
             artifact_timeout=_env_float("AGROMANCH_ARTIFACT_TIMEOUT", 600.0),
+            gemini_api_key=(
+                os.environ.get("GEMINI_API_KEY")
+                or os.environ.get("GOOGLE_API_KEY")
+                or None
+            ),
+            gemini_model=os.environ.get("GEMINI_MODEL", DEFAULT_GEMINI_MODEL).strip()
+            or DEFAULT_GEMINI_MODEL,
+            gemini_temperature=_env_float(
+                "GEMINI_TEMPERATURE", DEFAULT_GEMINI_TEMPERATURE
+            ),
+            require_grounding=_env_bool("AGROMANCH_REQUIRE_GROUNDING", True),
         )
 
     def ensure_output_dir(self) -> Path:

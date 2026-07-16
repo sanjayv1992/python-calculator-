@@ -22,20 +22,18 @@ async def main() -> None:
     args = parser.parse_args()
 
     async with agromanch_session() as ctx:
-        overview = await ctx.chat.ask_template(
+        overview = await ctx.advisory.pest_disease(
             ctx.notebook.id,
-            "pest_disease",
             pest_or_disease=args.pest,
             crop=args.crop,
         )
         print(overview.to_markdown())
 
-        # Follow-up in the same conversation: NotebookLM keeps the context.
-        follow_up = await ctx.chat.ask(
+        # Follow-up question, grounded the same way.
+        follow_up = await ctx.advisory.ask(
             ctx.notebook.id,
-            "What should a farmer check in the field every week to catch "
-            "this early? Keep it to 5 short points.",
-            conversation_id=overview.conversation_id,
+            f"For {args.pest} in {args.crop}, what should a farmer check in the "
+            "field every week to catch it early? Keep it to 5 short points.",
         )
         print("\n" + follow_up.to_markdown())
 

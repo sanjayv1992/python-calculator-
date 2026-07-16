@@ -62,9 +62,8 @@ async def main() -> None:
     from _common import agromanch_session
 
     async with agromanch_session() as ctx:
-        label_info = await ctx.chat.ask_template(
+        label_info = await ctx.advisory.pesticide_label(
             ctx.notebook.id,
-            "pesticide_dose",
             product=args.product,
             crop=args.crop,
             target=args.target,

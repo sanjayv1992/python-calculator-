@@ -25,7 +25,6 @@ Type 'exit' to quit.
 async def main() -> None:
     async with agromanch_session() as ctx:
         print(WELCOME)
-        conversation_id: str | None = None
 
         while True:
             try:
@@ -35,12 +34,9 @@ async def main() -> None:
             if not question or question.lower() in {"exit", "quit"}:
                 break
 
-            answer = await ctx.chat.ask(
-                ctx.notebook.id, question, conversation_id=conversation_id
-            )
-            conversation_id = answer.conversation_id
+            answer = await ctx.advisory.ask(ctx.notebook.id, question)
 
-            print(f"\nAgroManch: {answer.answer}")
+            print(f"\nAgroManch: {answer.body}")
             if answer.references:
                 print("\nSources:")
                 for ref in answer.references:

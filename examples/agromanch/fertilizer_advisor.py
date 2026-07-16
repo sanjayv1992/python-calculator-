@@ -24,19 +24,13 @@ async def main() -> None:
     args = parser.parse_args()
 
     async with agromanch_session() as ctx:
-        answer = await ctx.chat.ask_template(
+        answer = await ctx.advisory.fertilizer(
             ctx.notebook.id,
-            "fertilizer_advisor",
             crop=args.crop,
             stage=args.stage,
             soil_context=args.soil,
         )
         print(answer.to_markdown())
-
-        # Keep an audit trail inside the notebook itself.
-        await ctx.chat.save_as_note(
-            ctx.notebook.id, answer, title=f"Fertilizer advisory: {args.crop}"
-        )
 
 
 if __name__ == "__main__":

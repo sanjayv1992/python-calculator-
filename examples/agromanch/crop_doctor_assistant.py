@@ -30,9 +30,8 @@ async def main() -> None:
     args = parser.parse_args()
 
     async with agromanch_session() as ctx:
-        answer = await ctx.chat.ask_template(
+        answer = await ctx.advisory.crop_doctor(
             ctx.notebook.id,
-            "crop_doctor",
             crop=args.crop,
             region=args.region,
             symptoms=args.symptoms,

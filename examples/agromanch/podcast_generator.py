@@ -1,8 +1,9 @@
-"""Podcast generator: farmer-education Audio Overview from the knowledge base.
+"""Podcast generator: farmer-education podcast SCRIPT from verified context.
 
-Uses NotebookLM's audio generation (same engine as the web UI's Audio
-Overviews) with AgroManch instructions, then downloads the MP3 — ready for
-the AgroManch app or YouTube.
+In the current architecture the podcast is a Gemini-written script (host +
+expert dialogue) grounded in the knowledge base, plus a voiceover script ready
+for TTS. Turning the script into audio (a TTS provider, or NotebookLM's optional
+Audio Overview) is a documented publishing step, not part of the core path.
 
 Run:
     python examples/agromanch/podcast_generator.py \
@@ -23,17 +24,20 @@ async def main() -> None:
     args = parser.parse_args()
 
     async with agromanch_session() as ctx:
-        instructions = (
-            f"Create a farmer-friendly episode about {args.topic}. Use simple "
-            "language for Indian smallholder farmers, include practical field "
-            "steps, and keep an encouraging tone."
+        context = await ctx.generator.get_context(ctx.notebook.id, args.topic)
+
+        script = await ctx.content.generate(
+            ctx.notebook.id, "podcast_script", args.topic, context=context
         )
-        path = await ctx.artifacts.generate_podcast(
-            ctx.notebook.id,
-            instructions=instructions,
-            title=f"podcast_{args.topic}",
+        script_path = ctx.content.save(script)
+        print(f"Podcast script saved: {script_path}\n")
+        print(script.to_markdown())
+
+        voiceover = await ctx.content.generate(
+            ctx.notebook.id, "voiceover_script", args.topic, context=context
         )
-        print(f"Podcast ready: {path}")
+        vo_path = ctx.content.save(voiceover)
+        print(f"\nVoiceover script saved: {vo_path}")
 
 
 if __name__ == "__main__":

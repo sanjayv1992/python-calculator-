@@ -1,29 +1,34 @@
-"""Shared bootstrap for AgroManch examples.
+"""Shared bootstrap for AgroManch examples (Gemini content factory).
 
-Requires the package to be installed first:
+Requires the package installed and both credentials configured:
 
-    pip install -e ".[dev]"        # from the repository root
-    notebooklm login               # one-time Google authentication
+    pip install -e ".[dev,browser]"
+    notebooklm login                 # NotebookLM retrieval (Google sign-in)
+    export GEMINI_API_KEY=...         # Gemini generation
 
-Each example opens the shared AgroManch knowledge-base notebook (configured
-via AGROMANCH_* env vars, see .env.example). Run
-``python scripts/index_knowledge.py`` once to load the knowledge/ folder
-into it.
+Each example opens the AgroManch knowledge-base notebook (AGROMANCH_* env vars,
+see .env.example) and wires the unified pipeline:
+
+    NotebookLM retrieval → verified context → Gemini generation → output
+
+Run `python scripts/index_knowledge.py` once to load knowledge/ into the notebook.
 """
 
 from __future__ import annotations
 
+import sys
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, AsyncIterator
 
+from agromanch_ai.ai import AgroManchGenerator, ContentFactory, GeminiEngine
 from agromanch_ai.config import Settings
 from agromanch_ai.logging import configure_logging
 from agromanch_ai.services import (
-    ArtifactService,
-    ChatService,
+    AdvisoryService,
     ContentService,
     NotebookService,
+    RetrievalService,
 )
 from agromanch_ai.utils import ensure_authenticated
 
@@ -33,36 +38,48 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 
 @dataclass(slots=True)
 class AgroManchContext:
-    """Everything an example needs: client, notebook, and services."""
+    """Everything an example needs: client, notebook, and the unified services."""
 
     client: "NotebookLMClient"
     notebook: "Notebook"
     settings: Settings
     notebooks: NotebookService
-    chat: ChatService
+    retrieval: RetrievalService
+    generator: AgroManchGenerator
     content: ContentService
-    artifacts: ArtifactService
+    advisory: AdvisoryService
+    factory: ContentFactory
 
 
 @asynccontextmanager
 async def agromanch_session() -> AsyncIterator[AgroManchContext]:
-    """Open an authenticated session on the AgroManch knowledge notebook."""
+    """Open an authenticated, fully-wired AgroManch session."""
     from notebooklm import NotebookLMClient
 
     settings = Settings.from_env()
     configure_logging()
     ensure_authenticated(settings.profile)
 
+    if not settings.gemini_api_key:
+        sys.exit(
+            "GEMINI_API_KEY is not set. Export it (see .env.example) — Gemini is "
+            "the content-generation engine."
+        )
+
     async with NotebookLMClient.from_storage(profile=settings.profile) as client:
         notebooks = NotebookService(client, settings)
         notebook = await notebooks.get_or_create()
-        chat = ChatService(client, settings)
+        retrieval = RetrievalService(client, settings)
+        gemini = GeminiEngine(settings)
+        generator = AgroManchGenerator(retrieval, gemini, settings)
         yield AgroManchContext(
             client=client,
             notebook=notebook,
             settings=settings,
             notebooks=notebooks,
-            chat=chat,
-            content=ContentService(chat, settings),
-            artifacts=ArtifactService(client, settings),
+            retrieval=retrieval,
+            generator=generator,
+            content=ContentService(generator, settings),
+            advisory=AdvisoryService(generator, settings),
+            factory=ContentFactory(generator, settings),
         )

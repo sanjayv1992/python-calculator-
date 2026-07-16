@@ -27,9 +27,8 @@ async def main() -> None:
     args = parser.parse_args()
 
     async with agromanch_session() as ctx:
-        answer = await ctx.chat.ask_template(
+        answer = await ctx.advisory.weather(
             ctx.notebook.id,
-            "weather_advisory",
             region=args.region,
             crop_stage=args.crop_stage,
             weather_context=args.weather,

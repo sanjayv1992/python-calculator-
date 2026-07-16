@@ -46,6 +46,31 @@ def test_bad_float_env_raises(monkeypatch):
         Settings.from_env()
 
 
+def test_gemini_defaults():
+    settings = Settings()
+    assert settings.gemini_model == "gemini-2.5-flash"
+    assert settings.require_grounding is True
+    assert settings.gemini_api_key is None
+
+
+def test_gemini_from_env(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setenv("GEMINI_MODEL", "gemini-2.5-pro")
+    monkeypatch.setenv("GEMINI_TEMPERATURE", "0.9")
+    monkeypatch.setenv("AGROMANCH_REQUIRE_GROUNDING", "false")
+    settings = Settings.from_env()
+    assert settings.gemini_api_key == "test-key"
+    assert settings.gemini_model == "gemini-2.5-pro"
+    assert settings.gemini_temperature == 0.9
+    assert settings.require_grounding is False
+
+
+def test_gemini_google_api_key_fallback(monkeypatch):
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.setenv("GOOGLE_API_KEY", "fallback-key")
+    assert Settings.from_env().gemini_api_key == "fallback-key"
+
+
 def test_ensure_output_dir(tmp_path):
     target = tmp_path / "out"
     settings = Settings(output_dir=target)
