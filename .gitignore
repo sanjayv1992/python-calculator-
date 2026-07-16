@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Environment / secrets
+.env
+
+# AgroManch generated output and downloaded artifacts
+output/
+*.mp3
+*.mp4
+
+# Test / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

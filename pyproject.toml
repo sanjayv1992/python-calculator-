@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agromanch-ai"
+version = "0.1.0"
+description = "AgroManch AI Knowledge Engine for Indian agriculture, built on Google NotebookLM"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["agriculture", "notebooklm", "india", "crop-doctor", "agritech", "rag"]
+dependencies = [
+    "notebooklm-py>=0.7,<1.0",
+]
+
+[project.optional-dependencies]
+browser = ["notebooklm-py[browser]>=0.7,<1.0"]
+dev = ["pytest>=7.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
