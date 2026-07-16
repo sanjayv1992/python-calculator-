@@ -40,6 +40,11 @@ class AgroManchGenerator:
         self._gemini = gemini
         self._settings = settings
 
+    @property
+    def engine(self) -> TextEngine:
+        """The Gemini text engine (reused by the review agents — no new model)."""
+        return self._gemini
+
     async def get_context(
         self, notebook_id: str, query: str, *, source_ids: list[str] | None = None
     ) -> VerifiedContext:
@@ -99,6 +104,10 @@ class AgroManchGenerator:
             "target_region": self._settings.region,
             "seasonal_context": seasonal_context(),
             "content_angle": angle_directive(select_angle()),
+            # Enriched by the factory (Phase 2 intelligence + learning); safe
+            # defaults keep single-asset generation working.
+            "competitor_inspiration": "",
+            "learning_directive": "",
         }
         auto_fields.update(fields)
         system, user = render(task, **auto_fields)

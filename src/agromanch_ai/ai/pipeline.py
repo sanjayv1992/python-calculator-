@@ -12,10 +12,14 @@ import json
 from pathlib import Path
 
 from agromanch_ai.ai.generator import AgroManchGenerator
+from agromanch_ai.analytics.performance import PerformanceTracker
 from agromanch_ai.config import Settings
+from agromanch_ai.intelligence.angle_generator import select_angles
+from agromanch_ai.intelligence.competitor import competitor_inspiration
 from agromanch_ai.logging import get_logger
 from agromanch_ai.models import ContentBundle, VerifiedContext
-from agromanch_ai.utils.angles import angle_directive, select_angle
+from agromanch_ai.review.quality_manager import QualityManager
+from agromanch_ai.utils.angles import angle_directive
 from agromanch_ai.utils.quality_report import build_quality_report
 from agromanch_ai.utils.text import safe_filename
 
@@ -49,9 +53,19 @@ DEFAULT_BUNDLE: tuple[str, ...] = (
 class ContentFactory:
     """Produce and publish the full content bundle for a topic."""
 
-    def __init__(self, generator: AgroManchGenerator, settings: Settings) -> None:
+    # Asset reviewed by the multi-agent Quality Manager (the package "hero").
+    HERO_ASSET = "instagram_carousel"
+
+    def __init__(
+        self,
+        generator: AgroManchGenerator,
+        settings: Settings,
+        *,
+        tracker: PerformanceTracker | None = None,
+    ) -> None:
         self._generator = generator
         self._settings = settings
+        self._tracker = tracker
 
     async def produce(
         self,
@@ -61,6 +75,7 @@ class ContentFactory:
         items: tuple[str, ...] = DEFAULT_BUNDLE,
         require_grounding: bool | None = None,
         context: VerifiedContext | None = None,
+        review: bool | None = None,
     ) -> ContentBundle:
         """Generate the whole bundle for ``topic`` from one verified context."""
         if context is None:
@@ -70,11 +85,14 @@ class ContentFactory:
         bundle = ContentBundle(
             topic=topic, context=context, language=self._settings.language
         )
-        # One marketing angle for the whole package, so every asset is coherent
-        # yet the package feels fresh vs. other packages on the same crop.
-        angle = select_angle()
-        bundle.angle = angle
-        angle_field = angle_directive(angle)
+        # Competitor Intelligence: one fresh primary+secondary angle for the whole
+        # package (coherent, yet distinct from other packages on the same crop).
+        angles = select_angles()
+        bundle.angle = angles.primary
+        angle_field = angle_directive(angles.primary)
+        competitor_field = competitor_inspiration(angles)
+        learning_field = self._tracker.directive() if self._tracker else ""
+
         for item in items:
             content = await self._generator.run(
                 item,
@@ -82,10 +100,46 @@ class ContentFactory:
                 context=context,
                 require_grounding=require_grounding,
                 content_angle=angle_field,
+                competitor_inspiration=competitor_field,
+                learning_directive=learning_field,
             )
             bundle.items[item] = content
-        logger.info("Produced %d assets for %r (angle=%s)", len(bundle.items), topic, angle)
+        logger.info(
+            "Produced %d assets for %r (angle=%s)", len(bundle.items), topic, angles.primary
+        )
+
+        do_review = self._settings.review if review is None else review
+        if do_review and self.HERO_ASSET in bundle.items:
+            await self._review(bundle)
+
+        bundle.learning_snapshot = self._learning_snapshot(bundle, angles, learning_field)
         return bundle
+
+    async def _review(self, bundle: ContentBundle) -> None:
+        """Multi-agent review + rewrite loop on the hero asset (Gemini-only)."""
+        hero = bundle.items[self.HERO_ASSET]
+        manager = QualityManager(self._generator.engine)
+        outcome = await manager.review(
+            kind=self.HERO_ASSET,
+            content=hero.body,
+            context_block=bundle.context.to_prompt_block(),
+        )
+        hero.body = outcome.content  # keep the best (possibly rewritten) version
+        bundle.review_report = outcome.report.render()
+
+    def _learning_snapshot(self, bundle, angles, learning_field) -> dict:
+        """Explain why this package's creative choices were made (internal)."""
+        return {
+            "topic": bundle.topic,
+            "primary_angle": angles.primary,
+            "secondary_angle": angles.secondary,
+            "why_angle": "selected for freshness vs. recent packages on this crop",
+            "hook": "generated to the brand hook formulas for the primary angle",
+            "cta": "app/WhatsApp CTA per brand guide",
+            "hashtags": "15-20 mixed niche/broad/local per brand guide",
+            "caption_style": "conversational village-Hindi, human, non-AI",
+            "learning_directive": learning_field or "no performance history yet",
+        }
 
     def publish(self, bundle: ContentBundle) -> Path:
         """Lay out the bundle for one-click multi-platform publishing.
@@ -123,10 +177,16 @@ class ContentFactory:
             encoding="utf-8",
         )
 
-        # Internal-only Content Quality Report — NOT placed in any per-platform
-        # public post.md; lives at the bundle root for reviewers.
+        # Internal-only reports — NOT placed in any per-platform public post.md.
         (root / "quality_report.txt").write_text(
             build_quality_report(bundle, self._settings), encoding="utf-8"
         )
+        if bundle.review_report:
+            (root / "review_report.txt").write_text(bundle.review_report, encoding="utf-8")
+        if bundle.learning_snapshot is not None:
+            (root / "learning_snapshot.json").write_text(
+                json.dumps(bundle.learning_snapshot, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
         logger.info("Published bundle to %s", root)
         return root

@@ -44,6 +44,23 @@ PACKAGE_MODULES = [
     "agromanch_ai.knowledge.quality",
     "agromanch_ai.knowledge.catalog",
     "agromanch_ai.knowledge.registry",
+    "agromanch_ai.intelligence",
+    "agromanch_ai.intelligence.trend_library",
+    "agromanch_ai.intelligence.angle_generator",
+    "agromanch_ai.intelligence.competitor",
+    "agromanch_ai.analytics",
+    "agromanch_ai.analytics.history",
+    "agromanch_ai.analytics.learning",
+    "agromanch_ai.analytics.performance",
+    "agromanch_ai.review",
+    "agromanch_ai.review.base",
+    "agromanch_ai.review.writer",
+    "agromanch_ai.review.fact_checker",
+    "agromanch_ai.review.marketing_reviewer",
+    "agromanch_ai.review.seo_reviewer",
+    "agromanch_ai.review.readability_reviewer",
+    "agromanch_ai.review.quality_manager",
+    "agromanch_ai.prompts.review_prompts",
 ]
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

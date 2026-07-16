@@ -6,8 +6,10 @@ from agromanch_ai.config import Settings
 from conftest import FakeRetrieval
 
 
-def make_factory(context, engine, tmp_path):
-    settings = Settings(output_dir=tmp_path)
+def make_factory(context, engine, tmp_path, *, review=False):
+    # Review defaults off in these generation-focused tests (see test_review.py
+    # for the multi-agent review + rewrite loop).
+    settings = Settings(output_dir=tmp_path, review=review)
     generator = AgroManchGenerator(FakeRetrieval(context), engine, settings)
     return ContentFactory(generator, settings), settings
 
@@ -33,7 +35,7 @@ async def test_produce_generates_all_items_once(grounded_context, fake_engine, t
 
 async def test_produce_reuses_single_context(grounded_context, fake_engine, tmp_path):
     retrieval = FakeRetrieval(grounded_context)
-    settings = Settings(output_dir=tmp_path)
+    settings = Settings(output_dir=tmp_path, review=False)
     factory = ContentFactory(
         AgroManchGenerator(retrieval, fake_engine, settings), settings
     )

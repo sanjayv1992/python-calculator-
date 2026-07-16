@@ -101,6 +101,24 @@ one `generator.run()` render seam, or run alongside as pure utilities:
   scoring, dedup, outdated detection, and a searchable catalog that gates what
   NotebookLM indexes. See [knowledge-sources.md](knowledge-sources.md).
 
+## Self-improving layer (additive, Gemini-only)
+
+- **Multi-Agent Review** (`review/`) — Writer (the existing generator) → Fact
+  Checker → Marketing → SEO → Readability reviewers → Quality Manager. Reviewers
+  are Gemini calls returning structured JSON; the manager aggregates 8 categories
+  to an overall /100 and rewrites (≤3×) toward 95+, else returns the best version.
+  Opt-in-default-on via `AGROMANCH_REVIEW`; writes internal `review_report.txt`.
+- **Competitor Intelligence** (`intelligence/`) — viral-format library + primary/
+  secondary angle selection + a structure-only inspiration block injected through
+  the same render seam (`{competitor_inspiration}`).
+- **Performance Learning** (`analytics/`) — local-JSON history + learning engine →
+  `{learning_directive}`; deterministic, no external APIs. Publish writes
+  `learning_snapshot.json`.
+
+All three integrate through the single `generator.run()` seam and an additive
+factory review step — Gemini remains the only generator, NotebookLM retrieval-only,
+and `produce()`/`publish()` stay backward compatible.
+
 ## Scope boundary — media rendering
 Every bundle item is Gemini **text**: copy, scripts, SRT subtitles, and *prompts*
 for images/video. Actually rendering images (Imagen), video (Veo), or audio (TTS)

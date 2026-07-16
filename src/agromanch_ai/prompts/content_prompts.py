@@ -26,11 +26,14 @@ _SYS = (
     "OUTPUT: Final and publishable — no placeholders, no notes to the editor."
 )
 
-# Shared user template: knowledge + season + angle + the specific task.
+# Shared user template: knowledge + season + angle + competitor structure +
+# learned preferences + the specific task.
 _USER = (
     "{context_block}\n\n"
     "{seasonal_context}\n\n"
     "{content_angle}\n\n"
+    "{competitor_inspiration}\n\n"
+    "{learning_directive}\n\n"
     "TOPIC: {topic}\n\n"
     "TASK: "
 )

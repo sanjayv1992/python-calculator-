@@ -146,6 +146,9 @@ class ContentBundle:
     items: dict[str, GeneratedContent] = field(default_factory=dict)
     language: str = "en"
     angle: str | None = None  # marketing angle used for the whole package
+    # Optional internal artifacts (additive; populated by the review layer).
+    review_report: str | None = None
+    learning_snapshot: dict[str, Any] | None = None
     created_at: str = field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat()
     )

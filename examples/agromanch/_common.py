@@ -22,6 +22,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, AsyncIterator
 
 from agromanch_ai.ai import AgroManchGenerator, ContentFactory, GeminiEngine
+from agromanch_ai.analytics import PerformanceTracker
 from agromanch_ai.config import Settings
 from agromanch_ai.logging import configure_logging
 from agromanch_ai.services import (
@@ -72,6 +73,9 @@ async def agromanch_session() -> AsyncIterator[AgroManchContext]:
         retrieval = RetrievalService(client, settings)
         gemini = GeminiEngine(settings)
         generator = AgroManchGenerator(retrieval, gemini, settings)
+        # Performance learning: reads/writes local JSON; feeds learned style
+        # preferences into generation (empty until you record performance).
+        tracker = PerformanceTracker()
         yield AgroManchContext(
             client=client,
             notebook=notebook,
@@ -81,5 +85,5 @@ async def agromanch_session() -> AsyncIterator[AgroManchContext]:
             generator=generator,
             content=ContentService(generator, settings),
             advisory=AdvisoryService(generator, settings),
-            factory=ContentFactory(generator, settings),
+            factory=ContentFactory(generator, settings, tracker=tracker),
         )

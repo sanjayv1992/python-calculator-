@@ -12,6 +12,11 @@ the architecture already leaves a seam for (see [architecture.md](architecture.m
 - Full 15-asset content bundle per topic + one-click publishing handoff.
 - Advisory workflows (Crop Doctor, schemes, etc.) on the same pipeline.
 
+## Delivered alongside Phase 1: Self-improving layer ✅
+- Multi-Agent Review (Gemini reviewers) + automatic rewrite loop to 95+.
+- Competitor Intelligence (viral-format library, primary+secondary angles).
+- Performance Learning (local-JSON history → learned style preferences).
+
 ## Phase 2 — Farmer AI Chat
 - Wrap the generator/advisory service in an API (`src/agromanch_ai/api/`).
 - Per-farmer context and conversation history.

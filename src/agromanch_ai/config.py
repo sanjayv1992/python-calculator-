@@ -102,6 +102,8 @@ class Settings:
     gemini_temperature: float = DEFAULT_GEMINI_TEMPERATURE
     # Grounding: require NotebookLM verified context before generating.
     require_grounding: bool = True
+    # Multi-agent review pass at publish time (default on).
+    review: bool = True
 
     def __post_init__(self) -> None:
         if self.language not in SUPPORTED_LANGUAGES:
@@ -148,6 +150,7 @@ class Settings:
                 "GEMINI_TEMPERATURE", DEFAULT_GEMINI_TEMPERATURE
             ),
             require_grounding=_env_bool("AGROMANCH_REQUIRE_GROUNDING", True),
+            review=_env_bool("AGROMANCH_REVIEW", True),
         )
 
     def ensure_output_dir(self) -> Path:

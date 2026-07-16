@@ -44,6 +44,8 @@ _AUTO = dict(
     target_region="Purvanchal and Bihar",
     seasonal_context="SEASONAL CONTEXT: July, Kharif",
     content_angle="CONTENT ANGLE: Save Money",
+    competitor_inspiration="COMPETITOR INSPIRATION: borrow structure",
+    learning_directive="LEARNING: prefer number hooks",
 )
 
 

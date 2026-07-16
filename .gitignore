@@ -16,6 +16,10 @@ output/
 *.mp3
 *.mp4
 
+# Local performance-learning + catalog state (regenerated)
+data/
+knowledge/catalog.json
+
 # Test / tooling caches
 .pytest_cache/
 .mypy_cache/

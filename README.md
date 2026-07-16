@@ -66,6 +66,25 @@ automatically through the single prompt-injection seam:
   confidence, grounding, per-platform potential, overall /100) at the bundle
   root; it never appears in the public per-platform posts.
 
+## Self-improving layer (Gemini-only)
+
+- **Multi-Agent Review** (`review/`) — after generation, four Gemini reviewers
+  (fact-checker, marketing, SEO, readability) score the hero asset across 8
+  categories; the Quality Manager aggregates to an overall /100 and **rewrites up
+  to 3 times** toward a 95+ score, keeping the best version. Writes an internal
+  `review_report.txt`. Toggle with `AGROMANCH_REVIEW` (default on). Reviewers are
+  Gemini calls — no second model.
+- **Competitor Intelligence** (`intelligence/`) — a curated library of viral
+  content *structures* (no scraping). Each package gets a fresh **primary +
+  secondary angle**, and a "borrow structure, never copy wording" inspiration
+  block is injected into prompts.
+- **Performance Learning** (`analytics/`) — record real performance with
+  `scripts/record_performance.py`; the learning engine ranks the best hook / CTA /
+  carousel-structure / hashtags / pacing / caption styles and injects a
+  `learning_directive` so future generations prefer what performed best. Local
+  JSON, fully deterministic. Each publish also writes `learning_snapshot.json`
+  explaining the creative choices.
+
 ## Knowledge Library
 
 `knowledge/` is a structured, verifiable library across 19 categories. Each
