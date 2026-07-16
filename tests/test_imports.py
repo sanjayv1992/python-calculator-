@@ -33,6 +33,17 @@ PACKAGE_MODULES = [
     "agromanch_ai.utils.authcheck",
     "agromanch_ai.utils.dose",
     "agromanch_ai.utils.text",
+    "agromanch_ai.utils.seasonal",
+    "agromanch_ai.utils.angles",
+    "agromanch_ai.utils.quality_report",
+    "agromanch_ai.prompts.brand",
+    "agromanch_ai.knowledge",
+    "agromanch_ai.knowledge.frontmatter",
+    "agromanch_ai.knowledge.schema",
+    "agromanch_ai.knowledge.sources",
+    "agromanch_ai.knowledge.quality",
+    "agromanch_ai.knowledge.catalog",
+    "agromanch_ai.knowledge.registry",
 ]
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

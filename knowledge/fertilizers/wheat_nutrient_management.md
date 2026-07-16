@@ -1,3 +1,39 @@
+---
+title: Wheat — Nutrient Management
+category: fertilizers
+crop: wheat
+season: Rabi
+state: Uttar Pradesh
+district: ""
+source_org: State Agricultural University
+publication_date: "2023-10-01"
+last_verified_date: "2024-07-01"
+language: en
+scientific_names:
+  - Triticum aestivum
+hindi_names:
+  - गेहूं पोषण प्रबंधन
+local_names:
+  - gehun khaad
+keywords:
+  - wheat fertilizer
+  - nutrient management
+  - gehun khaad
+  - urea DAP MOP
+summary: Soil-test-based nutrient management for wheat with stage-wise nitrogen scheduling.
+important_facts:
+  - Apply full P and K plus part N as basal; remaining N as top dressing at CRI and tillering.
+  - Base doses on the Soil Health Card where possible.
+recommended_practices:
+  - Do not place high urea rates in direct seed contact.
+  - Ensure adequate soil moisture before top dressing nitrogen.
+dosage: Use the SAU soil-test-based recommendation for your district.
+warnings:
+  - Correct micronutrient (zinc) deficiency per soil test.
+references:
+  - SAU wheat package of practices
+---
+
 # Wheat — Nutrient Management (sample guide)
 
 > Starter sample document. Replace with your State Agricultural University's

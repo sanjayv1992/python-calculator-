@@ -43,6 +43,42 @@ Content and advisory share **one AI path** — NotebookLM retrieves, Gemini
 generates. Advisory outputs are the seeds of the future Crop Doctor, Farmer Chat,
 Dealer, and Scheme assistants.
 
+## Premium content quality (built in)
+
+Every generated package is shaped by a permanent quality system, applied
+automatically through the single prompt-injection seam:
+
+- **AgroManch Brand Style Guide** (`prompts/brand.py`) — one voice, seven
+  mandatory pillars (Emotional Hook, Practical Value, Scientific Accuracy, Local
+  Context, Clear CTA, High Shareability, High Saveability), and per-format rules
+  (carousel Problem→Cause→Solution→CTA, 3-second reel hooks, forwardable WhatsApp,
+  story-driven YouTube, art-directed image/Veo prompts).
+- **Language & region** — default **Hindi** (natural village Hindi, not
+  textbook), plus **Bhojpuri** (`bho`) for spoken/social assets while SEO+blog
+  stay searchable in Hindi/Hinglish; localised to **Purvanchal/UP/Bihar**
+  (`AGROMANCH_REGION`).
+- **Seasonal Intelligence** (`utils/seasonal.py`) — content auto-adapts to the
+  current agricultural season (crops, growth stage, pest pressure, farmer
+  activities) for the region.
+- **Viral angle** (`utils/angles.py`) — each package gets one fresh marketing
+  angle so the same crop never yields repetitive content.
+- **Internal Quality Report** — `publish()` writes `quality_report.txt` (research
+  confidence, grounding, per-platform potential, overall /100) at the bundle
+  root; it never appears in the public per-platform posts.
+
+## Knowledge Library
+
+`knowledge/` is a structured, verifiable library across 19 categories. Each
+document carries rich frontmatter metadata (title, category, crop, season, state,
+district, source, dates, scientific/Hindi/local names, keywords, summary, facts,
+practices, dosage, warnings, references). `python scripts/build_catalog.py`
+scores every document, flags duplicates and outdated docs, and writes a searchable
+`knowledge/catalog.json`; the indexer then feeds only trusted, fresh, non-duplicate
+knowledge into NotebookLM. Trusted-source priority (ICAR → SAU → KVK → Govt → IMD →
+Agmarknet → eNAM → labels → NABARD → FSSAI) and a curated source registry
+(`knowledge/registry.py`) are documented in
+[docs/knowledge-sources.md](docs/knowledge-sources.md).
+
 ## Grounding rule
 
 By default, generation **requires** NotebookLM-verified context, so agricultural

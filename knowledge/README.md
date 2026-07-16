@@ -5,6 +5,47 @@ AgroManch AI workflow. Its documents are indexed into a Google NotebookLM
 notebook, and all farmer-facing answers are grounded in — and cite — these
 documents.
 
+## Document metadata (frontmatter)
+
+Every knowledge document starts with a YAML-style frontmatter block so it is
+self-describing and machine-catalogued:
+
+```markdown
+---
+title: Rice — Bacterial Leaf Blight (BLB)
+category: crop_diseases
+crop: rice
+season: Kharif
+state: Bihar
+district: ""
+source_org: ICAR-IIRR
+publication_date: "2023-06-01"
+last_verified_date: "2024-07-01"
+language: en            # hi | en | bho
+scientific_names: [Xanthomonas oryzae pv. oryzae]
+hindi_names: [धान का जीवाणु झुलसा]
+local_names: [patauwa jhulsa]
+keywords: [rice disease, bacterial leaf blight, dhaan rog]
+summary: One-line summary.
+important_facts: [ ... ]
+recommended_practices: [ ... ]
+dosage: ""              # for agrochemicals, exactly per label
+warnings: [ ... ]
+references: [ ... ]
+---
+```
+
+## Catalog, quality score, dedup & freshness
+
+`python scripts/build_catalog.py` scans the library, gives each document a
+**quality score (0-100)** from source trust + metadata completeness + references +
+recency, **detects duplicates** (same title+crop+source or identical body) and
+**outdated** documents (past a per-category freshness window), and writes a
+searchable `knowledge/catalog.json`. The NotebookLM indexer consults this catalog
+and **only feeds trusted, fresh, non-duplicate, sufficiently-scored knowledge**
+into the Content Factory. Trusted-source priority and the curated collection
+registry are documented in [../docs/knowledge-sources.md](../docs/knowledge-sources.md).
+
 ## How indexing works
 
 NotebookLM treats each document as a *source*. `scripts/index_knowledge.py`

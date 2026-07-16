@@ -1,3 +1,40 @@
+---
+title: Maize — Fall Armyworm (FAW)
+category: insects
+crop: maize
+season: Kharif
+state: Uttar Pradesh
+district: ""
+source_org: ICAR-NCIPM
+publication_date: "2023-07-01"
+last_verified_date: "2024-07-01"
+language: en
+scientific_names:
+  - Spodoptera frugiperda
+hindi_names:
+  - फॉल आर्मीवर्म
+  - सैनिक कीट
+local_names:
+  - fauji keeda
+keywords:
+  - maize pest
+  - fall armyworm
+  - makka keeda
+  - FAW
+summary: Field identification, ETL and integrated management of Fall Armyworm in maize.
+important_facts:
+  - Windowpane feeding by young larvae; ragged holes and frass in the whorl.
+  - Inverted pale Y on head, four dark spots on second-to-last segment.
+recommended_practices:
+  - Deep summer ploughing, timely uniform sowing, pheromone traps.
+  - Apply registered insecticides into the whorl at label dose.
+dosage: Follow the CIB&RC-registered label dose for FAW on maize.
+warnings:
+  - Never exceed the label dose; wear protective equipment; observe PHI.
+references:
+  - ICAR-NCIPM Fall Armyworm advisory
+---
+
 # Maize — Fall Armyworm (FAW)
 
 **Pest:** *Spodoptera frugiperda* (Lepidoptera: Noctuidae)

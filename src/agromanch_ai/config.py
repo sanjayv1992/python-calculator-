@@ -16,8 +16,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 DEFAULT_NOTEBOOK_NAME = "AgroManch Knowledge Base"
-DEFAULT_LANGUAGE = "en"
-SUPPORTED_LANGUAGES = ("en", "hi")
+DEFAULT_LANGUAGE = "hi"  # AgroManch audience is Indian farmers
+SUPPORTED_LANGUAGES = ("hi", "en", "bho")
+DEFAULT_REGION = "Purvanchal (eastern UP) and Bihar"
 
 DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"  # override to gemini-2.5-pro for max quality
 DEFAULT_GEMINI_TEMPERATURE = 0.7
@@ -25,6 +26,30 @@ DEFAULT_GEMINI_TEMPERATURE = 0.7
 LANGUAGE_NAMES = {
     "en": "English",
     "hi": "Hindi (हिन्दी)",
+    "bho": "Bhojpuri (भोजपुरी)",
+}
+
+# Per-language style guidance injected into every prompt so the model writes the
+# way farmers actually speak — not literal, textbook translation.
+LANGUAGE_DIRECTIVES = {
+    "hi": (
+        "Write in natural, conversational Hindi as spoken in village India — NOT "
+        "literal, Sanskritized, or textbook Hindi. Use the everyday words farmers "
+        "use and mix in common Hinglish terms where natural (spray, fertilizer, "
+        "dose, mandi rate, WhatsApp). It must sound like a trusted local friend, "
+        "never machine-translated."
+    ),
+    "bho": (
+        "Write spoken/social copy (reels, voiceover, WhatsApp, hooks, captions, "
+        "carousel) in warm, folksy Bhojpuri (Devanagari) as spoken across "
+        "Purvanchal, eastern UP and Bihar — respectful and homely. IMPORTANT: keep "
+        "SEO keywords and the blog in Hindi/Hinglish so they stay searchable. "
+        "Never sound machine-translated."
+    ),
+    "en": (
+        "Write in clear, simple English using familiar Indian agricultural terms "
+        "(kharif, rabi, mandi, KVK). Short sentences a rural reader follows easily."
+    ),
 }
 
 
@@ -55,7 +80,8 @@ class Settings:
             :class:`~agromanch_ai.services.notebook_service.NotebookService`
             to find or create the notebook when ``notebook_id`` is unset.
         notebook_id: Pin a specific notebook by ID (skips lookup by name).
-        language: Answer language for farmer-facing output ("en" or "hi").
+        language: Output language for farmer-facing content ("hi", "en", "bho").
+        region: Target audience region for content (marketing/localisation).
         output_dir: Where generated content and downloaded artifacts land.
         profile: Optional notebooklm-py auth profile name (multi-account).
         source_wait_timeout: Seconds to wait for a source to finish indexing.
@@ -65,6 +91,7 @@ class Settings:
     notebook_name: str = DEFAULT_NOTEBOOK_NAME
     notebook_id: str | None = None
     language: str = DEFAULT_LANGUAGE
+    region: str = DEFAULT_REGION
     output_dir: Path = field(default_factory=lambda: Path("output"))
     profile: str | None = None
     source_wait_timeout: float = 120.0
@@ -87,6 +114,10 @@ class Settings:
     def language_name(self) -> str:
         return LANGUAGE_NAMES[self.language]
 
+    def language_directive(self) -> str:
+        """Per-language writing-style guidance injected into every prompt."""
+        return LANGUAGE_DIRECTIVES[self.language]
+
     @classmethod
     def from_env(cls) -> "Settings":
         """Build settings from ``AGROMANCH_*`` environment variables."""
@@ -100,6 +131,8 @@ class Settings:
                 os.environ.get("AGROMANCH_LANGUAGE", DEFAULT_LANGUAGE).strip().lower()
                 or DEFAULT_LANGUAGE
             ),
+            region=os.environ.get("AGROMANCH_REGION", DEFAULT_REGION).strip()
+            or DEFAULT_REGION,
             output_dir=Path(os.environ.get("AGROMANCH_OUTPUT_DIR", "output")),
             profile=os.environ.get("AGROMANCH_PROFILE") or None,
             source_wait_timeout=_env_float("AGROMANCH_SOURCE_WAIT_TIMEOUT", 120.0),

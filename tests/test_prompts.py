@@ -36,15 +36,22 @@ def test_advisory_specs_exist():
         assert name in ADVISORY_SPECS
 
 
+_AUTO = dict(
+    context_block="VERIFIED CONTEXT: rice needs water",
+    language_name="English",
+    brand_guide="BRAND GUIDE: pillars Emotional Hook, Practical Value, Local Context",
+    language_directive="natural Hindi",
+    target_region="Purvanchal and Bihar",
+    seasonal_context="SEASONAL CONTEXT: July, Kharif",
+    content_angle="CONTENT ANGLE: Save Money",
+)
+
+
 def test_render_returns_system_and_user():
-    system, user = render(
-        "instagram_carousel",
-        context_block="VERIFIED CONTEXT: rice needs water",
-        topic="rice irrigation",
-        language_name="English",
-    )
-    assert "AgroManch" in system
+    system, user = render("instagram_carousel", topic="rice irrigation", **_AUTO)
+    assert "AgroManch" in system or "BRAND GUIDE" in system
     assert "rice irrigation" in user
+    assert "Save Money" in user  # angle injected
     assert "{" not in system and "{" not in user
 
 
@@ -69,6 +76,21 @@ def test_every_spec_renders_with_dummy_fields(name):
 @pytest.mark.parametrize("name", sorted(CONTENT_SPECS))
 def test_content_specs_need_context_topic_language(name):
     assert {"context_block", "topic", "language_name"} <= required_fields(name)
+
+
+@pytest.mark.parametrize("name", sorted(CONTENT_SPECS))
+def test_content_specs_embed_brand_and_quality_fields(name):
+    # The permanent brand system + season + angle are wired into every content spec.
+    assert {"brand_guide", "language_directive", "target_region",
+            "seasonal_context", "content_angle"} <= required_fields(name)
+
+
+def test_brand_guide_carries_pillars():
+    from agromanch_ai.prompts.brand import BRAND_GUIDE
+
+    for pillar in ("Emotional Hook", "Practical Value", "Scientific Accuracy",
+                   "Local Context", "Clear CTA", "Shareability", "Saveability"):
+        assert pillar in BRAND_GUIDE
 
 
 def test_promptspec_temperature_carried():

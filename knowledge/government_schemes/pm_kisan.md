@@ -1,3 +1,35 @@
+---
+title: PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)
+category: government_schemes
+crop: ""
+season: ""
+state: All India
+district: ""
+source_org: Ministry of Agriculture & Farmers Welfare
+publication_date: "2023-01-01"
+last_verified_date: "2024-07-01"
+language: en
+scientific_names: []
+hindi_names:
+  - पीएम-किसान
+local_names: []
+keywords:
+  - pm kisan
+  - income support
+  - kisan samman nidhi
+  - DBT
+summary: Central income-support scheme for landholding farmer families paid via DBT.
+important_facts:
+  - Financial benefit paid in three equal instalments per year via DBT.
+  - Subject to documented exclusion categories.
+recommended_practices:
+  - Register on the official PM-KISAN portal or via CSC; complete e-KYC.
+warnings:
+  - Confirm current instalment amount and eligibility on the official portal.
+references:
+  - PM-KISAN official scheme guidelines
+---
+
 # PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)
 
 > Starter sample document. Always verify current benefits, eligibility, and

@@ -15,6 +15,8 @@ from agromanch_ai.ai.generator import AgroManchGenerator
 from agromanch_ai.config import Settings
 from agromanch_ai.logging import get_logger
 from agromanch_ai.models import ContentBundle, VerifiedContext
+from agromanch_ai.utils.angles import angle_directive, select_angle
+from agromanch_ai.utils.quality_report import build_quality_report
 from agromanch_ai.utils.text import safe_filename
 
 logger = get_logger("factory")
@@ -68,15 +70,21 @@ class ContentFactory:
         bundle = ContentBundle(
             topic=topic, context=context, language=self._settings.language
         )
+        # One marketing angle for the whole package, so every asset is coherent
+        # yet the package feels fresh vs. other packages on the same crop.
+        angle = select_angle()
+        bundle.angle = angle
+        angle_field = angle_directive(angle)
         for item in items:
             content = await self._generator.run(
                 item,
                 topic=topic,
                 context=context,
                 require_grounding=require_grounding,
+                content_angle=angle_field,
             )
             bundle.items[item] = content
-        logger.info("Produced %d assets for %r", len(bundle.items), topic)
+        logger.info("Produced %d assets for %r (angle=%s)", len(bundle.items), topic, angle)
         return bundle
 
     def publish(self, bundle: ContentBundle) -> Path:
@@ -113,6 +121,12 @@ class ContentFactory:
         (root / "manifest.json").write_text(
             json.dumps(bundle.manifest(), ensure_ascii=False, indent=2),
             encoding="utf-8",
+        )
+
+        # Internal-only Content Quality Report — NOT placed in any per-platform
+        # public post.md; lives at the bundle root for reviewers.
+        (root / "quality_report.txt").write_text(
+            build_quality_report(bundle, self._settings), encoding="utf-8"
         )
         logger.info("Published bundle to %s", root)
         return root

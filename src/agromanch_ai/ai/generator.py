@@ -13,6 +13,9 @@ from agromanch_ai.config import Settings
 from agromanch_ai.logging import get_logger
 from agromanch_ai.models import GeneratedContent, VerifiedContext
 from agromanch_ai.prompts import get_spec, render
+from agromanch_ai.prompts.brand import BRAND_GUIDE
+from agromanch_ai.utils.angles import angle_directive, select_angle
+from agromanch_ai.utils.seasonal import seasonal_context
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from agromanch_ai.services.retrieval_service import RetrievalService
@@ -83,13 +86,22 @@ class AgroManchGenerator:
             logger.warning("Generating UNVERIFIED %s for %r (no context)", task, topic)
 
         spec = get_spec(task)
-        system, user = render(
-            task,
-            context_block=context.to_prompt_block(),
-            topic=topic,
-            language_name=self._settings.language_name,
-            **fields,
-        )
+        # Auto-injected quality fields — the permanent brand system, language
+        # style, region, seasonal intelligence, and a fresh marketing angle are
+        # applied to every generation by default. Caller-supplied fields win
+        # (e.g. advisory crop/region, or a package-wide fixed content_angle).
+        auto_fields: dict[str, str] = {
+            "context_block": context.to_prompt_block(),
+            "topic": topic,
+            "language_name": self._settings.language_name,
+            "brand_guide": BRAND_GUIDE,
+            "language_directive": self._settings.language_directive(),
+            "target_region": self._settings.region,
+            "seasonal_context": seasonal_context(),
+            "content_angle": angle_directive(select_angle()),
+        }
+        auto_fields.update(fields)
+        system, user = render(task, **auto_fields)
         body = await self._gemini.generate(
             system_instruction=system, prompt=user, temperature=spec.temperature
         )

@@ -83,6 +83,24 @@ weather, mandi, scheme, livestock, ask), `RetrievalService` (NotebookLM),
 `NotebookService` (indexing). `ArtifactService` (NotebookLM audio/quiz) is kept
 **optional/legacy**, outside the core path.
 
+## Content-quality & knowledge layers (additive, single seam)
+
+These enrich generation without changing the pipeline — all injected through the
+one `generator.run()` render seam, or run alongside as pure utilities:
+
+- **Brand Style Guide** (`prompts/brand.py`) — permanent voice + 7 pillars +
+  per-format rules, injected as `{brand_guide}` into every content prompt.
+- **Language & region** — `Settings.language_directive()` (Hindi default,
+  Bhojpuri, English) and `{target_region}` localise every asset.
+- **Seasonal Intelligence** (`utils/seasonal.py`) — `{seasonal_context}` makes
+  content timely for the current agricultural season.
+- **Viral angle** (`utils/angles.py`) — one fresh `{content_angle}` per package.
+- **Quality Report** (`utils/quality_report.py`) — deterministic internal
+  `quality_report.txt` written at publish (never in public output).
+- **Knowledge Library** (`knowledge/` package) — frontmatter schema, quality
+  scoring, dedup, outdated detection, and a searchable catalog that gates what
+  NotebookLM indexes. See [knowledge-sources.md](knowledge-sources.md).
+
 ## Scope boundary — media rendering
 Every bundle item is Gemini **text**: copy, scripts, SRT subtitles, and *prompts*
 for images/video. Actually rendering images (Imagen), video (Veo), or audio (TTS)

@@ -78,7 +78,12 @@ class NotebookService:
         return {s.id: s.title for s in await self.list_sources(notebook_id)}
 
     async def import_knowledge_dir(
-        self, notebook_id: str, root: str | Path, *, skip_names: frozenset[str] = frozenset({"README.md"})
+        self,
+        notebook_id: str,
+        root: str | Path,
+        *,
+        skip_names: frozenset[str] = frozenset({"README.md"}),
+        skip_paths: frozenset[str] = frozenset(),
     ) -> list["Source"]:
         """Bulk-import a ``knowledge/`` tree into the notebook.
 
@@ -86,6 +91,9 @@ class NotebookService:
         - ``.pdf``/office files are uploaded as file sources
         - any ``urls.txt`` file is read line-by-line as URL sources
         - README.md files (folder descriptions) are skipped
+
+        ``skip_paths`` (relative POSIX paths) lets the catalog exclude duplicate,
+        outdated, or low-quality documents so only trusted knowledge is indexed.
 
         Files whose title already exists as a source are skipped, so re-runs
         are idempotent.
@@ -98,6 +106,9 @@ class NotebookService:
             if not path.is_file() or path.name in skip_names:
                 continue
             rel = path.relative_to(root).as_posix()
+            if rel in skip_paths:
+                logger.info("Skipping (catalog gated): %s", rel)
+                continue
 
             if path.name == "urls.txt":
                 for line in path.read_text(encoding="utf-8").splitlines():

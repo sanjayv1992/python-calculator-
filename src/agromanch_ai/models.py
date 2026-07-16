@@ -145,6 +145,7 @@ class ContentBundle:
     context: VerifiedContext
     items: dict[str, GeneratedContent] = field(default_factory=dict)
     language: str = "en"
+    angle: str | None = None  # marketing angle used for the whole package
     created_at: str = field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat()
     )
@@ -164,6 +165,7 @@ class ContentBundle:
         return {
             "topic": self.topic,
             "language": self.language,
+            "angle": self.angle,
             "created_at": self.created_at,
             "grounded": self.context.grounded and not self.context.is_empty,
             "sources": [ref.to_dict() for ref in self.context.references],

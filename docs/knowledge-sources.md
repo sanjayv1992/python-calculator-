@@ -48,6 +48,40 @@ verifiable sources.
 - **Add a safety net.** For agrochemical and scheme answers, always advise the
   farmer to confirm with the printed label / official portal and the local KVK.
 
+## Quality scoring, dedup & freshness (automated)
+
+`python scripts/build_catalog.py` grades every document and writes
+`knowledge/catalog.json`:
+
+- **Quality score (0-100):** source trust rank (ICAR highest → FSSAI) + metadata
+  completeness + references present + recency; agrochemical docs are penalised if
+  dosage/warnings are missing. Bands: High ≥75, Medium ≥50, Low below.
+- **Duplicate detection:** flags documents sharing a title+crop+source key or an
+  identical body hash; duplicates are excluded from indexing.
+- **Outdated detection:** flags documents past a per-category freshness window
+  (mandi/weather 1 yr, schemes 2 yr, agrochemicals 3 yr, else 6 yr); undated docs
+  are treated as needing re-verification.
+
+Only documents that are trusted, fresh, non-duplicate and sufficiently scored are
+fed into the Content Factory.
+
+## Curated collection registry & assisted workflow
+
+`src/agromanch_ai/knowledge/registry.py` holds a curated list of official source
+portals per category (the repeatable "where to collect from" list). Collection is
+an **assisted, human-verified workflow**, not an unattended scraper — official
+sites have terms of use and every agricultural fact must be verified before it is
+trusted:
+
+```bash
+python scripts/fetch_source.py --list          # show the source registry
+python scripts/fetch_source.py --url <official-url> --category crops --title "..."
+# → scaffolds a draft doc with frontmatter for a human to VERIFY and complete
+```
+
+The repository ships this framework plus the curated registry and verified **seed
+documents**; bulk auto-download of government PDFs is intentionally out of scope.
+
 ## What NOT to put in the knowledge base
 
 - Unverified social-media claims or vendor marketing without technical backing.

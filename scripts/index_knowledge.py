@@ -39,10 +39,28 @@ async def main() -> None:
     logger = configure_logging()
     ensure_authenticated(settings.profile)
 
+    # Build the catalog first so only trusted, fresh, non-duplicate docs index.
+    from agromanch_ai.knowledge.catalog import build_catalog
+
+    entries, summary = build_catalog(root, write=True)
+    skip_paths = frozenset(
+        Path(e["path"]).relative_to(root).as_posix()
+        for e in entries
+        if not e["usable"]
+    )
+    logger.info(
+        "Catalog: %d docs, avg quality %.1f; gating %d (dup/outdated/low-quality)",
+        summary.total,
+        summary.avg_score,
+        len(skip_paths),
+    )
+
     async with NotebookLMClient.from_storage(profile=settings.profile) as client:
         notebooks = NotebookService(client, settings)
         notebook = await notebooks.get_or_create()
-        added = await notebooks.import_knowledge_dir(notebook.id, root)
+        added = await notebooks.import_knowledge_dir(
+            notebook.id, root, skip_paths=skip_paths
+        )
         logger.info(
             "Done. Notebook %r (%s) gained %d new sources.",
             notebook.title,

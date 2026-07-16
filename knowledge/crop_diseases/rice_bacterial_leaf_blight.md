@@ -1,3 +1,38 @@
+---
+title: Rice — Bacterial Leaf Blight (BLB)
+category: crop_diseases
+crop: rice
+season: Kharif
+state: Bihar
+district: ""
+source_org: ICAR-IIRR
+publication_date: "2023-06-01"
+last_verified_date: "2024-07-01"
+language: en
+scientific_names:
+  - Xanthomonas oryzae pv. oryzae
+hindi_names:
+  - धान का जीवाणु झुलसा
+local_names:
+  - patauwa jhulsa
+keywords:
+  - rice disease
+  - bacterial leaf blight
+  - dhaan rog
+  - kresek
+summary: Identification and integrated management of bacterial leaf blight in rice for eastern India.
+important_facts:
+  - Water-soaked lesions from leaf tips turning straw-coloured with wavy margins.
+  - Favoured by 25-34 C, high humidity, heavy rain and excess nitrogen.
+recommended_practices:
+  - Use resistant varieties and balanced nitrogen.
+  - Ensure drainage and field sanitation.
+warnings:
+  - Confirm any bactericide and dose with the local KVK before use.
+references:
+  - ICAR-IIRR rice disease management bulletin
+---
+
 # Rice — Bacterial Leaf Blight (BLB)
 
 **Pathogen:** *Xanthomonas oryzae* pv. *oryzae* (bacterium)

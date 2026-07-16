@@ -9,8 +9,9 @@ from agromanch_ai.config import DEFAULT_NOTEBOOK_NAME, Settings
 def test_defaults():
     settings = Settings()
     assert settings.notebook_name == DEFAULT_NOTEBOOK_NAME
-    assert settings.language == "en"
-    assert settings.language_name.startswith("English")
+    assert settings.language == "hi"  # AgroManch audience is Indian farmers
+    assert "Hindi" in settings.language_name
+    assert "Purvanchal" in settings.region
     assert settings.notebook_id is None
 
 
@@ -37,7 +38,7 @@ def test_from_env_blank_falls_back(monkeypatch):
     monkeypatch.setenv("AGROMANCH_LANGUAGE", "")
     settings = Settings.from_env()
     assert settings.notebook_name == DEFAULT_NOTEBOOK_NAME
-    assert settings.language == "en"
+    assert settings.language == "hi"
 
 
 def test_bad_float_env_raises(monkeypatch):
@@ -63,6 +64,26 @@ def test_gemini_from_env(monkeypatch):
     assert settings.gemini_model == "gemini-2.5-pro"
     assert settings.gemini_temperature == 0.9
     assert settings.require_grounding is False
+
+
+def test_bhojpuri_is_supported():
+    settings = Settings(language="bho")
+    assert "Bhojpuri" in settings.language_name
+
+
+def test_language_directive_distinct_per_language():
+    hi = Settings(language="hi").language_directive()
+    bho = Settings(language="bho").language_directive()
+    en = Settings(language="en").language_directive()
+    assert hi != bho != en
+    assert "Sanskritized" in hi  # natural, not textbook Hindi
+    # Bhojpuri keeps SEO/blog searchable in Hindi/Hinglish
+    assert "Hindi" in bho and "SEO" in bho
+
+
+def test_region_from_env(monkeypatch):
+    monkeypatch.setenv("AGROMANCH_REGION", "Marathwada")
+    assert Settings.from_env().region == "Marathwada"
 
 
 def test_gemini_google_api_key_fallback(monkeypatch):
