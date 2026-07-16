@@ -17,6 +17,12 @@ the architecture already leaves a seam for (see [architecture.md](architecture.m
 - Competitor Intelligence (viral-format library, primary+secondary angles).
 - Performance Learning (local-JSON history → learned style preferences).
 
+## Delivered: Autonomous Content Operations ✅
+- Content Strategy Planner (7/30/90-day), Editorial Calendar, Campaign Engine.
+- Intelligent Publishing Queue, Content Gap Analyzer, Evergreen classifier.
+- Farmer Persona Engine (prompt-injected), Recommendation layer, internal reports.
+- All deterministic and offline (`scripts/plan_content.py`); no new LLM.
+
 ## Phase 2 — Farmer AI Chat
 - Wrap the generator/advisory service in an API (`src/agromanch_ai/api/`).
 - Per-farmer context and conversation history.

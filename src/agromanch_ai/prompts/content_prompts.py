@@ -31,6 +31,7 @@ _SYS = (
 _USER = (
     "{context_block}\n\n"
     "{seasonal_context}\n\n"
+    "{persona_directive}\n\n"
     "{content_angle}\n\n"
     "{competitor_inspiration}\n\n"
     "{learning_directive}\n\n"

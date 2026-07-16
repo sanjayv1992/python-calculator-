@@ -92,6 +92,7 @@ class Settings:
     notebook_id: str | None = None
     language: str = DEFAULT_LANGUAGE
     region: str = DEFAULT_REGION
+    persona: str = "small_farmer"
     output_dir: Path = field(default_factory=lambda: Path("output"))
     profile: str | None = None
     source_wait_timeout: float = 120.0
@@ -120,6 +121,12 @@ class Settings:
         """Per-language writing-style guidance injected into every prompt."""
         return LANGUAGE_DIRECTIVES[self.language]
 
+    def persona_directive(self) -> str:
+        """Audience-persona guidance injected into every prompt."""
+        from agromanch_ai.personas import persona_directive
+
+        return persona_directive(self.persona)
+
     @classmethod
     def from_env(cls) -> "Settings":
         """Build settings from ``AGROMANCH_*`` environment variables."""
@@ -135,6 +142,8 @@ class Settings:
             ),
             region=os.environ.get("AGROMANCH_REGION", DEFAULT_REGION).strip()
             or DEFAULT_REGION,
+            persona=(os.environ.get("AGROMANCH_PERSONA", "small_farmer").strip().lower()
+                     or "small_farmer"),
             output_dir=Path(os.environ.get("AGROMANCH_OUTPUT_DIR", "output")),
             profile=os.environ.get("AGROMANCH_PROFILE") or None,
             source_wait_timeout=_env_float("AGROMANCH_SOURCE_WAIT_TIMEOUT", 120.0),

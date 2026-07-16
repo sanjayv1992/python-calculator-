@@ -43,6 +43,7 @@ _AUTO = dict(
     language_directive="natural Hindi",
     target_region="Purvanchal and Bihar",
     seasonal_context="SEASONAL CONTEXT: July, Kharif",
+    persona_directive="AUDIENCE PERSONA: Small Farmer",
     content_angle="CONTENT ANGLE: Save Money",
     competitor_inspiration="COMPETITOR INSPIRATION: borrow structure",
     learning_directive="LEARNING: prefer number hooks",

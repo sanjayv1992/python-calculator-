@@ -61,6 +61,16 @@ PACKAGE_MODULES = [
     "agromanch_ai.review.readability_reviewer",
     "agromanch_ai.review.quality_manager",
     "agromanch_ai.prompts.review_prompts",
+    "agromanch_ai.personas",
+    "agromanch_ai.planning",
+    "agromanch_ai.planning.campaign",
+    "agromanch_ai.planning.calendar",
+    "agromanch_ai.planning.planner",
+    "agromanch_ai.planning.queue",
+    "agromanch_ai.planning.gaps",
+    "agromanch_ai.planning.evergreen",
+    "agromanch_ai.planning.recommend",
+    "agromanch_ai.planning.reports",
 ]
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

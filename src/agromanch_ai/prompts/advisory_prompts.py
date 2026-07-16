@@ -25,7 +25,7 @@ _SYS = (
 
 # Seasonal context is injected so advice is timely; no marketing angle (accuracy
 # first). The generator also supplies content_angle, which advisory ignores.
-_USER = "{context_block}\n\n{seasonal_context}\n\nTOPIC: {topic}\n\n"
+_USER = "{context_block}\n\n{seasonal_context}\n\n{persona_directive}\n\nTOPIC: {topic}\n\n"
 
 
 def _advisory(instruction: str, temperature: float = 0.4) -> PromptSpec:

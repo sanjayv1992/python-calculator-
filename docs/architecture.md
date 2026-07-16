@@ -119,6 +119,17 @@ All three integrate through the single `generator.run()` seam and an additive
 factory review step — Gemini remains the only generator, NotebookLM retrieval-only,
 and `produce()`/`publish()` stay backward compatible.
 
+## Autonomous Content Operations (additive, deterministic, no LLM)
+
+`planning/` + `personas.py` decide what/when/why/where/how, all JSON-backed and
+offline: Content Strategy Planner (7/30/90-day), Editorial Calendar (dedup +
+balance), Campaign Engine, Publishing Queue (priority + platform routing), Gap
+Analyzer, Evergreen classifier, Recommendation layer, and the Farmer Persona
+Engine (injected as `{persona_directive}` through the same render seam). Internal
+reports: strategy / editorial / gap / campaign. Driven by `scripts/plan_content.py`
+— it consumes the seasonal engine, knowledge catalog, and performance learning but
+does not touch the generation pipeline.
+
 ## Scope boundary — media rendering
 Every bundle item is Gemini **text**: copy, scripts, SRT subtitles, and *prompts*
 for images/video. Actually rendering images (Imagen), video (Veo), or audio (TTS)

@@ -66,6 +66,30 @@ automatically through the single prompt-injection seam:
   confidence, grounding, per-platform potential, overall /100) at the bundle
   root; it never appears in the public per-platform posts.
 
+## Autonomous content operations
+
+Beyond generating content, AgroManch decides **what / when / why / where / how**
+(deterministic, JSON-backed, offline — `python scripts/plan_content.py --days 30`):
+
+- **Content Strategy Planner** (`planning/planner.py`) — 7/30/90-day plans from
+  season, crop calendar, active campaigns, and priorities.
+- **Editorial Calendar** (`planning/calendar.py`) — `editorial_calendar.json`,
+  deduplicated topics, crop/format balance, status tracking.
+- **Campaign Engine** (`planning/campaign.py`) — Rice/Wheat Season, Crop Doctor
+  Awareness, Pashu Bazaar, Schemes, Weather Alerts, Festival — each with goal,
+  audience, KPIs, assets and frequency.
+- **Publishing Queue** (`planning/queue.py`) — `publishing_queue.json` prioritised
+  by seasonal urgency, government/weather alerts, viral potential and knowledge
+  confidence, with per-item platform recommendations.
+- **Gap Analyzer** (`planning/gaps.py`) — missing crops/categories/personas →
+  what to create next.
+- **Evergreen classifier** (`planning/evergreen.py`) and **Recommendation layer**
+  (`planning/recommend.py`) — best format/hook/time/CTA/hashtags/campaign.
+- **Farmer Persona Engine** (`personas.py`) — 9 personas; `AGROMANCH_PERSONA`
+  adapts language, CTA and examples in every prompt.
+- Internal reports: `strategy_report.txt`, `editorial_report.txt`,
+  `gap_report.txt`, `campaign_report.txt`.
+
 ## Self-improving layer (Gemini-only)
 
 - **Multi-Agent Review** (`review/`) — after generation, four Gemini reviewers

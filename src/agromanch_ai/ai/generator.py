@@ -102,6 +102,7 @@ class AgroManchGenerator:
             "brand_guide": BRAND_GUIDE,
             "language_directive": self._settings.language_directive(),
             "target_region": self._settings.region,
+            "persona_directive": self._settings.persona_directive(),
             "seasonal_context": seasonal_context(),
             "content_angle": angle_directive(select_angle()),
             # Enriched by the factory (Phase 2 intelligence + learning); safe
