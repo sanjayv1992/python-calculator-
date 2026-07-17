@@ -20,8 +20,10 @@ DEFAULT_LANGUAGE = "hi"  # AgroManch audience is Indian farmers
 SUPPORTED_LANGUAGES = ("hi", "en", "bho")
 DEFAULT_REGION = "Purvanchal (eastern UP) and Bihar"
 
-DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"  # override to gemini-2.5-pro for max quality
+DEFAULT_GEMINI_MODEL = "gemini-2.5-pro"  # max quality; auto-falls back to flash
+FALLBACK_GEMINI_MODEL = "gemini-2.5-flash"
 DEFAULT_GEMINI_TEMPERATURE = 0.7
+DEFAULT_GEMINI_TIMEOUT = 120.0  # seconds per request
 
 LANGUAGE_NAMES = {
     "en": "English",
@@ -70,6 +72,45 @@ def _env_bool(name: str, default: bool) -> bool:
     return raw.strip().lower() in ("1", "true", "yes", "on")
 
 
+def load_env_file(path: str | Path = ".env", *, override: bool = False) -> int:
+    """Load KEY=VALUE pairs from a .env file into os.environ.
+
+    Dependency-free by design. Lines starting with ``#`` and blanks are skipped;
+    surrounding quotes are stripped; an optional leading ``export `` is allowed.
+    By default existing environment variables win (``override=False``). Returns
+    the number of variables set. Values are never logged.
+    """
+    path = Path(path)
+    if not path.is_file():
+        return 0
+    count = 0
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        if line.startswith("export "):
+            line = line[len("export "):]
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        if not key or (key in os.environ and not override):
+            continue
+        os.environ[key] = value
+        count += 1
+    return count
+
+
+def mask_secret(value: str | None) -> str:
+    """Render a secret safely for logs/UI: first 4 + last 2 chars only."""
+    if not value:
+        return "(not set)"
+    if len(value) <= 8:
+        return "****"
+    return f"{value[:4]}…{value[-2:]}"
+
+
 @dataclass(slots=True)
 class Settings:
     """Runtime settings for AgroManch services.
@@ -101,6 +142,7 @@ class Settings:
     gemini_api_key: str | None = None
     gemini_model: str = DEFAULT_GEMINI_MODEL
     gemini_temperature: float = DEFAULT_GEMINI_TEMPERATURE
+    gemini_timeout: float = DEFAULT_GEMINI_TIMEOUT
     # Grounding: require NotebookLM verified context before generating.
     require_grounding: bool = True
     # Multi-agent review pass at publish time (default on).
@@ -129,7 +171,13 @@ class Settings:
 
     @classmethod
     def from_env(cls) -> "Settings":
-        """Build settings from ``AGROMANCH_*`` environment variables."""
+        """Build settings from the environment, loading ``.env`` first.
+
+        A ``.env`` file in the working directory is read (existing environment
+        variables always win), so ``GEMINI_API_KEY`` etc. can live outside the
+        shell profile. Secrets are never logged.
+        """
+        load_env_file()
         return cls(
             notebook_name=os.environ.get(
                 "AGROMANCH_NOTEBOOK_NAME", DEFAULT_NOTEBOOK_NAME
@@ -158,6 +206,7 @@ class Settings:
             gemini_temperature=_env_float(
                 "GEMINI_TEMPERATURE", DEFAULT_GEMINI_TEMPERATURE
             ),
+            gemini_timeout=_env_float("GEMINI_TIMEOUT", DEFAULT_GEMINI_TIMEOUT),
             require_grounding=_env_bool("AGROMANCH_REQUIRE_GROUNDING", True),
             review=_env_bool("AGROMANCH_REVIEW", True),
         )

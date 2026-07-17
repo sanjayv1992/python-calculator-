@@ -49,9 +49,57 @@ def test_bad_float_env_raises(monkeypatch):
 
 def test_gemini_defaults():
     settings = Settings()
-    assert settings.gemini_model == "gemini-2.5-flash"
+    assert settings.gemini_model == "gemini-2.5-pro"  # max quality by default
+    assert settings.gemini_timeout == 120.0
     assert settings.require_grounding is True
     assert settings.gemini_api_key is None
+
+
+def test_env_file_loaded_by_from_env(monkeypatch, tmp_path):
+    env = tmp_path / ".env"
+    env.write_text('GEMINI_API_KEY="file-key"\nGEMINI_MODEL=gemini-2.5-flash\n')
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.delenv("GOOGLE_API_KEY", raising=False)
+    monkeypatch.delenv("GEMINI_MODEL", raising=False)
+    settings = Settings.from_env()
+    assert settings.gemini_api_key == "file-key"
+    assert settings.gemini_model == "gemini-2.5-flash"
+
+
+def test_env_file_does_not_override_environment(monkeypatch, tmp_path):
+    (tmp_path / ".env").write_text("GEMINI_API_KEY=file-key\n")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("GEMINI_API_KEY", "env-key")
+    assert Settings.from_env().gemini_api_key == "env-key"
+
+
+def test_load_env_file_parsing(tmp_path, monkeypatch):
+    from agromanch_ai.config import load_env_file
+
+    env = tmp_path / "x.env"
+    env.write_text(
+        "# comment\n\nexport A_TEST_VAR='quoted value'\nB_TEST_VAR=plain\nBADLINE\n"
+    )
+    monkeypatch.delenv("A_TEST_VAR", raising=False)
+    monkeypatch.delenv("B_TEST_VAR", raising=False)
+    assert load_env_file(env) == 2
+    import os
+
+    assert os.environ["A_TEST_VAR"] == "quoted value"
+    assert os.environ["B_TEST_VAR"] == "plain"
+    monkeypatch.delenv("A_TEST_VAR")
+    monkeypatch.delenv("B_TEST_VAR")
+
+
+def test_mask_secret_never_reveals():
+    from agromanch_ai.config import mask_secret
+
+    assert mask_secret(None) == "(not set)"
+    assert mask_secret("short") == "****"
+    masked = mask_secret("AIzaSyFakeExampleKey12345")
+    assert masked.startswith("AIza") and masked.endswith("45")
+    assert "FakeExample" not in masked
 
 
 def test_gemini_from_env(monkeypatch):

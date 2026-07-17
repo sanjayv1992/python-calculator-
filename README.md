@@ -150,6 +150,12 @@ tests/           offline unit + smoke tests (fakes for Gemini & NotebookLM)
 
 ## Setup
 
+**Guided path (recommended):** `python scripts/setup.py` walks through the Gemini
+key, NotebookLM login, notebook selection, saving `.env`, and full validation.
+Re-check anytime with `python scripts/check_environment.py` (PASS/FAIL per check,
+ends with **Factory Ready**). Full credential guide + troubleshooting:
+[docs/setup.md](docs/setup.md).
+
 ### 1. Install
 
 ```bash
