@@ -183,7 +183,11 @@ class Settings:
                 "AGROMANCH_NOTEBOOK_NAME", DEFAULT_NOTEBOOK_NAME
             ).strip()
             or DEFAULT_NOTEBOOK_NAME,
-            notebook_id=os.environ.get("AGROMANCH_NOTEBOOK_ID") or None,
+            notebook_id=(
+                os.environ.get("AGROMANCH_NOTEBOOK_ID")
+                or os.environ.get("NOTEBOOK_ID")
+                or None
+            ),
             language=(
                 os.environ.get("AGROMANCH_LANGUAGE", DEFAULT_LANGUAGE).strip().lower()
                 or DEFAULT_LANGUAGE
