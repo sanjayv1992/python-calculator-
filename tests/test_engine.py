@@ -83,6 +83,28 @@ async def test_validate_falls_back_to_flash_on_404():
     assert await engine.validate() == "gemini-2.5-flash"
 
 
+async def test_validate_falls_back_to_flash_on_429_pro_quota():
+    # Free-tier keys: pro returns 429 while flash works.
+    engine = make_engine(FakeClient(count_tokens_script=[FakeAPIError(429), "ok"]))
+    assert await engine.validate() == "gemini-2.5-flash"
+
+
+async def test_validate_walks_full_chain_to_flash_latest():
+    # 2.5-flash retired for new keys (404) -> chain ends at gemini-flash-latest.
+    engine = make_engine(
+        FakeClient(count_tokens_script=[FakeAPIError(404), FakeAPIError(404), "ok"])
+    )
+    assert await engine.validate() == "gemini-flash-latest"
+
+
+async def test_validate_quota_error_when_whole_chain_429():
+    engine = make_engine(
+        FakeClient(count_tokens_script=[FakeAPIError(429)] * 3)
+    )
+    with pytest.raises(GeminiQuotaError):
+        await engine.validate()
+
+
 async def test_generate_retries_then_succeeds(monkeypatch):
     async def no_sleep(_):
         pass

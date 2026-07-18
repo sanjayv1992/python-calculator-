@@ -134,7 +134,8 @@ def test_region_from_env(monkeypatch):
     assert Settings.from_env().region == "Marathwada"
 
 
-def test_gemini_google_api_key_fallback(monkeypatch):
+def test_gemini_google_api_key_fallback(monkeypatch, tmp_path):
+    monkeypatch.chdir(tmp_path)  # isolate from any real .env in the repo root
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     monkeypatch.setenv("GOOGLE_API_KEY", "fallback-key")
     assert Settings.from_env().gemini_api_key == "fallback-key"

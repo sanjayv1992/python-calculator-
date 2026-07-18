@@ -20,8 +20,12 @@ DEFAULT_LANGUAGE = "hi"  # AgroManch audience is Indian farmers
 SUPPORTED_LANGUAGES = ("hi", "en", "bho")
 DEFAULT_REGION = "Purvanchal (eastern UP) and Bihar"
 
-DEFAULT_GEMINI_MODEL = "gemini-2.5-pro"  # max quality; auto-falls back to flash
-FALLBACK_GEMINI_MODEL = "gemini-2.5-flash"
+DEFAULT_GEMINI_MODEL = "gemini-2.5-pro"  # max quality; auto-falls back down the chain
+# Tried in order when the configured model is unavailable (404) or has no
+# quota (429): 2.5-flash may be retired for new keys, so the alias
+# gemini-flash-latest is the last resort that tracks Google's current model.
+FALLBACK_GEMINI_MODELS = ("gemini-2.5-flash", "gemini-flash-latest")
+FALLBACK_GEMINI_MODEL = FALLBACK_GEMINI_MODELS[0]  # backward-compat alias
 DEFAULT_GEMINI_TEMPERATURE = 0.7
 DEFAULT_GEMINI_TIMEOUT = 120.0  # seconds per request
 

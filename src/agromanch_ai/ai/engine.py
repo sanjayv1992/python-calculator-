@@ -21,7 +21,7 @@ from __future__ import annotations
 import asyncio
 from typing import AsyncIterator, Protocol, runtime_checkable
 
-from agromanch_ai.config import FALLBACK_GEMINI_MODEL, Settings, mask_secret
+from agromanch_ai.config import FALLBACK_GEMINI_MODELS, Settings, mask_secret
 from agromanch_ai.logging import get_logger
 
 logger = get_logger("gemini")
@@ -92,6 +92,8 @@ class GeminiEngine:
         self._model = settings.gemini_model
         self._default_temperature = settings.gemini_temperature
         self._validated = False
+        # Models still untried when the current one is unavailable/quota-less.
+        self._fallbacks = [m for m in FALLBACK_GEMINI_MODELS if m != self._model]
         if client is not None:
             self._client = client
         else:
@@ -118,6 +120,15 @@ class GeminiEngine:
         """The currently active model (may change after fallback)."""
         return self._model
 
+    def _fall_back(self, reason: str) -> bool:
+        """Switch to the next fallback model; False when none remain."""
+        if not self._fallbacks:
+            return False
+        nxt = self._fallbacks.pop(0)
+        logger.warning("Model %s %s; falling back to %s", self._model, reason, nxt)
+        self._model = nxt
+        return True
+
     # ------------------------------------------------------------------ auth
     async def validate(self) -> str:
         """Validate the key with a real, cheap API call before first use.
@@ -142,19 +153,18 @@ class GeminiEngine:
                         code=code, masked=mask_secret(self._settings.gemini_api_key)
                     )
                 ) from exc
-            if code == 404 and self._model != FALLBACK_GEMINI_MODEL:
-                logger.warning(
-                    "Model %s unavailable to this key; falling back to %s",
-                    self._model,
-                    FALLBACK_GEMINI_MODEL,
-                )
-                self._model = FALLBACK_GEMINI_MODEL
-                return await self.validate()
             if code == 404:
+                # Model retired/unavailable to this key — walk the fallback chain.
+                if self._fall_back("unavailable (404)"):
+                    return await self.validate()
                 raise GeminiConfigurationError(
                     MODEL_UNAVAILABLE_HELP.format(model=self._model)
                 ) from exc
             if code == 429:
+                # Free-tier keys often have zero quota for pro-tier models while
+                # a flash model works fine — walk the chain before failing.
+                if self._fall_back("quota-limited (429)"):
+                    return await self.validate()
                 raise GeminiQuotaError(QUOTA_HELP) from exc
             raise
 
@@ -199,14 +209,8 @@ class GeminiEngine:
                 )
             )
         if code == 404:
-            if self._model != FALLBACK_GEMINI_MODEL:
-                logger.warning(
-                    "Model %s unavailable mid-run; falling back to %s",
-                    self._model,
-                    FALLBACK_GEMINI_MODEL,
-                )
-                self._model = FALLBACK_GEMINI_MODEL
-                return "retry"  # retry immediately with the fallback model
+            if self._fall_back("unavailable mid-run (404)"):
+                return "retry"  # retry immediately with the next fallback model
             return GeminiConfigurationError(
                 MODEL_UNAVAILABLE_HELP.format(model=self._model)
             )

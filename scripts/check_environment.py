@@ -64,11 +64,12 @@ async def run_checks(topic: str) -> int:
         try:
             engine = GeminiEngine(settings)
             model = await engine.validate()
+            # No max_output_tokens: thinking models spend budget on reasoning
+            # first, so a tiny cap can yield an empty visible reply.
             reply = await engine.generate(
                 system_instruction="Reply with exactly: OK",
                 prompt="Say OK.",
                 temperature=0.0,
-                max_output_tokens=64,
             )
             gemini_ok = bool(reply)
             _report("Gemini request succeeds", gemini_ok, f"model: {model}")
